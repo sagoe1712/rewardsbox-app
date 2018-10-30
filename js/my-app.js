@@ -114,7 +114,7 @@ myApp.onPageInit('about', function (page) {
 
 (function ($) {
  "use strict";
-
+    
 $(document).ready(function(){
     /*------------------------
     menu toggle
@@ -123,47 +123,51 @@ $(document).ready(function(){
     $(".js-toggle-menu").on('click', function(){
         $(".show-menu").slideToggle();
     });
-
+    
     $(".js-toggle-menu2").on('click', function(){
         $(".show-menu2").slideToggle();
     });
-
+    
     $( '.swipebox' ).swipebox();
 
   $(".clickopen").on('click', function(){
         $(".popover-links").slideToggle();
     });
-
-
+     
+    
 });
-
-
-
-})(jQuery);
+    
+    
+    
+})(jQuery); 
 
 
 $(document).on('click','#btn-login', function(){
 		var username = $('#txtUsername').val();
 var password = $('#pwdPass').val();
 //	myApp.alert(username +" "+ password);
-	if(username == "olayinka" && password =="password"){
-	window.location.replace('inner.html');
+	if(username == "olayinka"){
+		if(password =="password"){
+			window.location.replace('inner.html');
+		}else{
+		myApp.alert("Invalid Credentials");
+	}
+		
 	}else{
 		myApp.alert("Invalid Credentials");
-		return false;
 	}
-
+			   
 });
 
 $(document).on('click','#logout', function(){
-	window.location.replace('index.html');
+		window.location.replace('index.html');
 
-
+			   
 });
 
 
 $(document).on('pageinit', '.page[data-page="catalogue"]', function (e) {
-
+	
 $.ajax({
     type:"GET",
     url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=catalogue",
@@ -182,7 +186,7 @@ $.ajax({
         }
     }
 });
-
+	
 });
 
 
@@ -195,12 +199,12 @@ $(document).on('click', 'a.cat-link', function(){
 
 
 $(document).on('pageinit', '.page[data-page="shop-list"]', function (e) {
-
+	
 	product_code = "";
 	$('#category-name').html(category_name);
-
+	
 	var prd_itm ="";
-
+	
 	$.ajax({
     			type:"POST",
 			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
@@ -225,11 +229,11 @@ $(document).on('pageinit', '.page[data-page="shop-list"]', function (e) {
 		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
 		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
 		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-		 prd_itm += '</div>';
+		 prd_itm += '</div>';							
 		 prd_itm += '<div class="price-box">';
 		 prd_itm += '<span class="new-price">'+value.price+'</span>';
-		 prd_itm += '</div>';
-		 prd_itm += '</div>';
+		 prd_itm += '</div>';	
+		 prd_itm += '</div>';					
 		 prd_itm += '</div>';
 		 prd_itm += '</div>';
 					})
@@ -244,15 +248,15 @@ $(document).on('pageinit', '.page[data-page="shop-list"]', function (e) {
 
 				}
 		});
-
+	
 });
 
 $(document).on('click', 'a.product-link', function(){
-
+	
 	product_code = "";
 	product_code = $(this).attr('data-product_code');
 	mainView.router.loadPage('single-product.html');
-
+	
 });
 
 $(document).on('pageinit', '.page[data-page="single-product"]', function (e) {
@@ -282,13 +286,13 @@ $(document).on('pageinit', '.page[data-page="single-product"]', function (e) {
 
 
 						let result = "";
-
+						
 						result += '<div class="single-product">';
 						result += '<div class="single-product-img">';
 						result += '<a href="#"><img src="'+msg.data.image[0].image_url+'" alt="" /></a>';
 						result += '</div>';
 						result += '<div class="single-product-content">';
-						result += '<h1 class="product_title">'+msg.data.product_name+'</h1>';
+						result += '<h1 class="product_title">'+msg.data.product_name+'</h1>';	
 						result += '<div class="price-box">';
 						result += '<span class="new-price product-price">'+msg.data.price+'</span>';
 						result += '</div>';
@@ -298,12 +302,12 @@ $(document).on('pageinit', '.page[data-page="single-product"]', function (e) {
 						result += '<a href="#"><i class="fa fa-star"></i></a>';
 						result += '<a href="#"><i class="fa fa-star"></i></a>';
 						result += '<a href="#"><i class="fa fa-star"></i></a>';
-						result += '</div>';
+						result += '</div>';	
 						result += '<div class="short-description">';
-						result += '<p>'+msg.data.description+'</p>';
+						result += '<p>'+msg.data.description+'</p>';						
 						result += '</div>';
 						result += '<form action="#">';
-
+						
 						let result2 = "";
 						if (msg.data.delivery_type == 1){
                delivery_type = 1;
@@ -339,7 +343,7 @@ $(document).on('pageinit', '.page[data-page="single-product"]', function (e) {
 							result2+='</select></p>';
               	 delivery_type = 2;
 								}
-
+						
 							if (msg.data.is_variant == 1){//It is a boolean to show product has some attributes 1 is true and 0 is false
 
                             result2+='<div class="varient-div">';
@@ -362,22 +366,22 @@ $(document).on('pageinit', '.page[data-page="single-product"]', function (e) {
                             });
 
 						}
-
+						
 						result += result2;
-
+						
 						result += '<div class="quantity">';
 						result += '<input type="number" id="itm-quant" value="" min="1" max="'+msg.data.max_quantity+'">';
 						result += '<a href="#" id="btn-buy">Buy Now</a>';
 						result += '</div>';
-						result += '</form>';
+						result += '</form>';						
 						result += '</div>';
 						result += '</div>';
 
-
-
-
+						
+						
+					
 					 prod_signature = msg.data.signature;
-
+					 
                         $('.single-product-area').html(result)
 								}
 					else{
@@ -512,7 +516,7 @@ $$(document).on('pageInit', '.page[data-page="shopping-cart"]', function (e) {
 					delivery_name = "Delivery";
 					$('.table-cart-address').show();
 					$('.p-delivery').show();
-
+		
 					$.ajax({
     			type:"GET",
 			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_state",
@@ -531,8 +535,8 @@ $$(document).on('pageInit', '.page[data-page="shopping-cart"]', function (e) {
 				}
 	});
 				}
-
-
+						
+	
 							result = '<tr class="carttr_1">';
 							result += '<td>';
 							result += '<div class="cartpage-image">';
@@ -570,11 +574,11 @@ $$(document).on('pageInit', '.page[data-page="shopping-cart"]', function (e) {
 							result += '</div>';
 							result += '</td>';
 							result += '</tr>';
-
+						
                         $('.table-prd-item').html(result);
 						totalprice();
                         totalshipitm();
-
+						
 
 });
 
@@ -682,3 +686,4 @@ $(document).on('click', '#btn-checkout', function(){
 	}
 
 });
+
