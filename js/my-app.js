@@ -147,7 +147,9 @@ $(document).on('click','#btn-login', function(){
 var password = $('#pwdPass').val();
 //	myApp.alert(username +" "+ password);
 	if(username == "olayinka" && password =="password"){
-		window.location.replace('inner.html');
+		window.location.href='inner.html';
+		window.location.href('inner.html');
+		window.location.href='index.html';
 	}else{
 		myApp.alert("Invalid Credentials");
 		return false;
@@ -156,7 +158,8 @@ var password = $('#pwdPass').val();
 });
 
 $(document).on('click','#logout', function(){
-		window.location.replace('inner.html');
+		window.location.href='index.html';
+	window.location.href('index.html');
 
 			   
 });
