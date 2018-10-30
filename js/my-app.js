@@ -149,18 +149,22 @@ var password = $('#pwdPass').val();
 	if(username == "olayinka"){
 		if(password =="password"){
 			window.location.replace('inner.html');
+			return false;
 		}else{
 		myApp.alert("Invalid Credentials");
+			return false;
 	}
 		
 	}else{
 		myApp.alert("Invalid Credentials");
+		return false;
 	}
 			   
 });
 
 $(document).on('click','#logout', function(){
 		window.location.replace('index.html');
+	return false;
 
 			   
 });
