@@ -1,0 +1,120 @@
+
+<!-- We don't need full layout here, because this page will be parsed with Ajax-->
+<!-- Top Navbar-->
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="left"><a href="#" class="back link"> <i class="icon icon-back"></i><span>Back</span></a></div>
+    <div class="center sliding">Shopping Cart</div>
+  </div>
+</div>
+<div class="pages">
+  <!-- Page, data-page contains page name-->
+  <div data-page="shop-list" class="page">
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <div class="content-block">
+        <div class="content-block-inner">
+			<div class="cart-heading-1 ">
+				<h2><i class="fa fa-star-o"></i> Shopping Cart</h2>
+			</div>
+			<div class="cart-table">
+				<table>
+					<thead>
+						<tr>
+							<th class="width-1"></th>
+							<th class="width-2">Product Name</th>
+							<th class="width-4">Unit Price</th>
+							<th class="width-5">Qty</th>	
+							<th class="width-6">Subtotal</th>	
+							<th class="width-7"> </th>	
+						</tr>														
+					</thead>
+					<tbody class="table-prd-item">
+						
+					</tbody>									
+				</table>
+			</div>
+			<div class="cartpage-button">
+				<ul>
+					<li><button>Continue Shopping</button></li>
+					<li><button>Clear Cart</button></li>
+					<li><button>Update Cart</button></li>
+				</ul>
+			</div>
+			<div class="cartbox">
+				<div class="cart-heading">
+					Contact Information
+				</div>
+				<div class="cart-contenttext">
+					<p>Enter your Contact Informaiton.</p>
+					<form action="#">
+						<div class="inputbox">
+							<label>First Name  <span>*</span></label>
+							<input type="text" id="txtfname"  class="inputtype">
+						</div>
+						<div class="inputbox">
+							<label>Last Name  <span>*</span></label>
+							<input type="text" id="txtlname"  class="inputtype">
+						</div>
+						<div class="inputbox">
+							<label>Email Address  <span>*</span></label>
+							<input type="text" id="txtemail"  class="inputtype">
+						</div>
+						<div class="inputbox">
+							<label>Phone Number  <span>*</span></label>
+							<input type="text" id="txtphone"  class="inputtype">
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="cartbox">
+				<div class="cart-heading">
+					<h2>Delivery Cost</h2>
+				</div>
+				<div class="cart-contenttext">
+					<p>Enter your destination to get a shipping estimate.</p>
+					<form action="#">
+						<div class="inputbox">
+							<label>Address  <span>*</span></label>
+							<input type="text" id="txtaddress" class="inputtype">
+						</div>
+						<div class="inputbox">
+							<label>Country  <span>*</span></label>
+							<select  class="inputtype">
+								<option>NIGERIA</option>
+							</select>
+						</div>
+						<div class="inputbox">
+							<label>State  <span>*</span></label>
+							<select  id="delivery-state" class="inputtype">
+								<option value="">Select State </option>
+							</select>
+						</div>
+						<div class="inputbox">
+							<label>City  <span>*</span></label>
+							<select id="delivery-city"  class="inputtype">
+								<option value="">Select City</option>
+							</select>
+						</div>
+					</form>
+				</div>	
+			</div>
+			<div class="cartbox">
+				<div class="cart-heading">
+					<h2>Total</h2>
+				</div>
+				<div class="cart-contenttext">
+					<div class="carttotal">
+						<p><span class="sub-t">Total Product<span class="sub-t-p" id="cost-price"></span></span></p>
+						<p class="p-delivery"><span class="sub-t">Total Delivery<span class="sub-t-p" id="delivery-text"></span></span></p>
+						<p><span class="grand-t">Grand Total <span class="sub-t-p" id="grand-total"></span></span>	</p>
+						<p><input type="button" class="mybutton" value="CHECK OUT" id="btn-checkout">	</p>				
+					</div>
+				</div>	
+			</div>	
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
