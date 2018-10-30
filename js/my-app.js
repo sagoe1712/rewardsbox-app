@@ -149,7 +149,6 @@ var password = $('#pwdPass').val();
 	if(username == "olayinka" && password =="password"){
 		window.location.href='inner.html';
 		window.location.href('inner.html');
-		window.location.href='index.html';
 	}else{
 		myApp.alert("Invalid Credentials");
 		return false;
