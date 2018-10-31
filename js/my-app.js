@@ -170,8 +170,8 @@ $(document).on('click','#logout', function(){
 });
 
 
-$(document).on('pageinit', '.page[data-page="catalogue"]', function (e) {
-	
+	myApp.onPageInit('catalogue', function (page) {
+	myApp.alert("catalogue page loaded");
 $.ajax({
     type:"GET",
     url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=catalogue",
@@ -196,14 +196,15 @@ $.ajax({
 
 
 $(document).on('click', 'a.cat-link', function(){
+	
 	category_name = $(this).attr('data-catname');
 	category_id = $(this).attr('data-catid');
 	mainView.router.loadPage('shop-list.html');
 });
 
 
-$(document).on('pageinit', '.page[data-page="shop-list"]', function (e) {
-	
+
+	myApp.onPageInit('shop-list', function (page) {
 	product_code = "";
 	$('#category-name').html(category_name);
 	
@@ -263,7 +264,8 @@ $(document).on('click', 'a.product-link', function(){
 	
 });
 
-$(document).on('pageinit', '.page[data-page="single-product"]', function (e) {
+
+	myApp.onPageInit('single-product', function (page) {
 	//alert(product_code);
 	//alert(category_id);
 
@@ -498,7 +500,7 @@ $(document).on('click', '#btn-buy', function(){
 		 }
 });
 
-$$(document).on('pageInit', '.page[data-page="shopping-cart"]', function (e) {
+myApp.onPageInit('shopping-cart', function (page) {
   // Following code will be executed for page with data-page attribute equal to "about"
  // myApp.alert('This is the auction description page');
 
