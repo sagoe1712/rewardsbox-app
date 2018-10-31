@@ -33,14 +33,14 @@ var myApp = new Framework7();
 
 function totalprice(){
 	 tprice = parseFloat(prdprice) * parseFloat(prod_quant);
-	$('#col-tot-price').html(tprice);
-	$('#cost-price').html(tprice);
+	$('#col-tot-price').html('N '+tprice);
+	$('#cost-price').html('N '+tprice);
 }
 
 
 function totalshipitm(){
 	 totalshipping = parseFloat(tprice) + parseFloat(delivery_price);
-	$('#grand-total').html(totalshipping);
+	$('#grand-total').html('N '+totalshipping);
 }
 
 function calccombo(){
@@ -171,7 +171,7 @@ $(document).on('click','#logout', function(){
 
 
 	myApp.onPageInit('catalogue', function (page) {
-	myApp.alert("catalogue page loaded");
+	//myApp.alert("catalogue page loaded");
 $.ajax({
     type:"GET",
     url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=catalogue",
@@ -182,7 +182,7 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-                $('.list-categories').append("<p><a class='cat-link' href='catalogue.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></p>");
+                $('.list-categories').append("<tr><a class='cat-link' href='catalogue.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><td width='90%'>"+value.category+"</td><td width='10%'><i class='fa fa-chevron-right'></i></td></a></tr>");
             })
         }
         else{
@@ -228,15 +228,15 @@ $(document).on('click', 'a.cat-link', function(){
 		 prd_itm += '</div>';
 		 prd_itm += '<div class="shop-content">';
 		 prd_itm += '<h3><a href="single-product.html" class="product-link" data-product_code="'+value.product_code+'">'+value.product+'</a></h3>';
-		 prd_itm += '<div class="pro-rating-s">';
-		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-		 prd_itm += '</div>';							
+//		 prd_itm += '<div class="pro-rating-s">';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '</div>';							
 		 prd_itm += '<div class="price-box">';
-		 prd_itm += '<span class="new-price">'+value.price+'</span>';
+		 prd_itm += '<span class="new-price">N'+value.price+'</span>';
 		 prd_itm += '</div>';	
 		 prd_itm += '</div>';					
 		 prd_itm += '</div>';
@@ -300,15 +300,15 @@ $(document).on('click', 'a.product-link', function(){
 						result += '<div class="single-product-content">';
 						result += '<h1 class="product_title">'+msg.data.product_name+'</h1>';	
 						result += '<div class="price-box">';
-						result += '<span class="new-price product-price">'+msg.data.price+'</span>';
+						result += '<span class="new-price product-price">N '+msg.data.price+'</span>';
 						result += '</div>';
-						result += '<div class="pro-rating">';
-						result += '<a href="#"><i class="fa fa-star"></i></a>';
-						result += '<a href="#"><i class="fa fa-star"></i></a>';
-						result += '<a href="#"><i class="fa fa-star"></i></a>';
-						result += '<a href="#"><i class="fa fa-star"></i></a>';
-						result += '<a href="#"><i class="fa fa-star"></i></a>';
-						result += '</div>';	
+//						result += '<div class="pro-rating">';
+//						result += '<a href="#"><i class="fa fa-star"></i></a>';
+//						result += '<a href="#"><i class="fa fa-star"></i></a>';
+//						result += '<a href="#"><i class="fa fa-star"></i></a>';
+//						result += '<a href="#"><i class="fa fa-star"></i></a>';
+//						result += '<a href="#"><i class="fa fa-star"></i></a>';
+//						result += '</div>';	
 						result += '<div class="short-description">';
 						result += '<p>'+msg.data.description+'</p>';						
 						result += '</div>';
@@ -376,7 +376,7 @@ $(document).on('click', 'a.product-link', function(){
 						result += result2;
 						
 						result += '<div class="quantity">';
-						result += '<input type="number" id="itm-quant" value="" min="1" max="'+msg.data.max_quantity+'">';
+						result += 'Qty<input type="number" id="itm-quant" value="1" min="1" max="'+msg.data.max_quantity+'">';
 						result += '<a href="#" id="btn-buy">Buy Now</a>';
 						result += '</div>';
 						result += '</form>';						
