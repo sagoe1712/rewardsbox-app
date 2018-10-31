@@ -694,3 +694,8 @@ $(document).on('click', '#btn-checkout', function(){
 
 });
 
+myApp.onPageInit('success-page', function (page) {
+		$('#vouch').html(voucher_code);
+		$('#orderno').html(order_no);
+})
+
