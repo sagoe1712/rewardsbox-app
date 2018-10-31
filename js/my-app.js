@@ -259,7 +259,7 @@ $(document).on('click', 'a.cat-link', function(){
 
 $(document).on('click', 'a.product-link', function(){
 	
-	product_code = "";
+	//product_code = "";
 	product_code = $(this).attr('data-product_code');
 	mainView.router.loadPage('single-product.html');
 	
@@ -320,7 +320,7 @@ $(document).on('click', 'a.product-link', function(){
                delivery_type = 1;
 							result2+='<p class=""><input type="radio" class="rad-delmet" value="1" checked="checked"/>';
 							result2+='Pickup';
-							result2 +='</p><p><select class="constant-pickup drppickup" required>';
+							result2 +='</p><p><select class="constant-pickup drppickup">';
 							result2 +='<option>Pickup Location</option>';
 
                             $.each(msg.data.branch_details, function(key,value)
@@ -357,7 +357,7 @@ $(document).on('click', 'a.product-link', function(){
 
 							$.each(msg.data.attributes, function(key2,attributes)
                             {
-									result2+='<p><select data-name ="'+attributes.name+'" class="sel-varient constant-pickup" id="'+attributes.id+'" required><option value="">Select '+attributes.name+'</option>';
+									result2+='<p><select data-name ="'+attributes.name+'" class="sel-varient constant-pickup" id="'+attributes.id+'"><option value="">Select '+attributes.name+'</option>';
 								$.each(attributes.details, function(key3,details)
                             	{
 									result2+='<option value="'+details.variant_id+'">'+details.variant_name+'</option>';
@@ -377,7 +377,7 @@ $(document).on('click', 'a.product-link', function(){
 						result += result2;
 						
 						result += '<div class="quantity">';
-						result += 'Qty<input type="number" id="itm-quant" value="1" min="1" max="'+msg.data.max_quantity+'">';
+						result += '<input type="number" id="itm-quant" value="1" min="1" max="'+msg.data.max_quantity+'" placeholder="Quantity">';
 						result += '<a href="#" id="btn-buy">Buy Now</a>';
 						result += '</div>';
 						result += '</form>';						
@@ -697,5 +697,10 @@ $(document).on('click', '#btn-checkout', function(){
 myApp.onPageInit('success-page', function (page) {
 		$('#vouch').html(voucher_code);
 		$('#orderno').html(order_no);
-})
+});
+
+	$(document).on('click', '#change-qty', function(){
+		 prod_quant = $('#itm-quant').val();
+			totalprice();
+	});
 

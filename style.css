@@ -1200,6 +1200,10 @@ table tr th.width-4 {
   padding: 5px;
   width: 225px;
 }
+
+select.inputtype{
+	height: 30px !important;
+}
 .mybutton {
   background: #ec4445 none repeat scroll 0 0;
   border: medium none;
@@ -1379,7 +1383,9 @@ tfoot{border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
     max-width: 50% !important;
     margin: 100px auto !important;
 }
-
+.list-categories{
+	margin-top: 20px !important;
+}
 .list-categories, .list-categories tr, .list-categories tr td{
 	border: none !important;
 }
