@@ -796,6 +796,7 @@ $(document).on('change', '#exp-category', function(){
 
 $(document).on('click', '#btn-experience', function(){
 	category_id = exp_cate_id;
+	category_name = exp_cate_name+" in "+exp_city_name+","+exp_country_name;
 	mainView.router.loadPage('shop-list.html');
 	
 });
