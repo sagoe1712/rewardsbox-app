@@ -1379,3 +1379,11 @@ tfoot{border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
     max-width: 50% !important;
     margin: 100px auto !important;
 }
+
+.list-categories, .list-categories tr, .list-categories tr td{
+	border: none !important;
+}
+
+.list-categories tr td{
+	padding: 10px !important;
+}

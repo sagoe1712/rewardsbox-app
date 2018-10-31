@@ -41,6 +41,7 @@ function totalprice(){
 function totalshipitm(){
 	 totalshipping = parseFloat(tprice) + parseFloat(delivery_price);
 	$('#grand-total').html('N '+totalshipping);
+	$('#grand-total').html('N '+totalshipping);
 }
 
 function calccombo(){
@@ -182,7 +183,7 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-                $('.list-categories').append("<tr><a class='cat-link' href='catalogue.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><td width='90%'>"+value.category+"</td><td width='10%'><i class='fa fa-chevron-right'></i></td></a></tr>");
+                $('.list-categories').append("<tr><td width='90%'><a class='cat-link' href='catalogue.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='catalogue.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>");
             })
         }
         else{
