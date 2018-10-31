@@ -12,7 +12,7 @@ var prod_quant;
 var totalprdprice;
 var prod_signature;
 var max_quant;
-var img_url;
+let img_url;
 var branch_id;
 var branch_name;
 var delivery_type;
@@ -28,6 +28,12 @@ var member_no =2111;
 var voucher_code;
 var order_no;
 var mdt;
+var exp_country_id;
+var exp_country_name;
+var exp_city_id;
+var exp_city_name;
+var exp_cate_id;
+var exp_cate_name;
 
 var myApp = new Framework7();
 
@@ -206,7 +212,7 @@ $(document).on('click', 'a.cat-link', function(){
 
 
 	myApp.onPageInit('shop-list', function (page) {
-	product_code = "";
+	
 	$('#category-name').html(category_name);
 	
 	var prd_itm ="";
@@ -215,7 +221,7 @@ $(document).on('click', 'a.cat-link', function(){
     			type:"POST",
 			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
         headers:{"token":token},
-			data:{category_id: category_id},
+			data:{category_id: category_id, country_id: exp_country_id, city_id: exp_city_id},
     			dataType:"json",
     			success: function(msg){
 
@@ -480,8 +486,10 @@ $(document).on('click', '#btn-buy', function(){
                   }
               }
              else {
-                 branch_name = $('.drppickup option:selected').attr('data-branchname');
-                 branch_id = $('.drppickup option:selected').val();
+                 //branch_name = $('.drppickup option:selected').attr('data-branchname');
+               //  branch_name = $('option:selected', this).attr();
+				// branch_id = $('.drppickup option:selected').val();
+				// branch_id = $('.drppickup').val();
 
                  //myApp.alert(branch_name);
 
@@ -704,3 +712,90 @@ myApp.onPageInit('success-page', function (page) {
 			totalprice();
 	});
 
+
+
+myApp.onPageInit('experience', function (page) {
+	$.ajax({
+    			type:"GET",
+			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_country",
+        headers:{token:token},
+    			dataType:"json",
+    			success: function(msg){
+					//alert("na we dey here");
+					if (msg.status ==1 ){
+
+						$.each(msg.data, function(key,value)
+                            {
+							   $('#exp-country').append('<option value="'+value.country_id+'" data-country="'+value.country_name+'">'+value.country_name+'</option>');
+							   });
+
+					}
+				}
+	});
+});
+
+$(document).on('change', '.drppickup', function(){
+	 branch_name = $('option:selected', this).attr('data-branchname');
+				 branch_id = $('.drppickup').val();
+});
+
+$(document).on('change', '#exp-country', function(){
+	exp_country_id = $(this).val();
+	exp_country_name = $('option:selected', this).attr('data-name');
+	
+	//fetches the city in the country
+	
+	$.ajax({
+    			type:"GET",
+			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_city&country_id="+exp_country_id,
+        headers:{token:token},
+    			dataType:"json",
+    			success: function(msg){
+					//alert("na we dey here");
+					if (msg.status ==1 ){
+
+						$.each(msg.data, function(key,value)
+                            {
+							   $('#exp-city').append('<option value="'+value.city_id+'" data-cityname="'+value.name+'">'+value.name+'</option>');
+							   });
+
+					}
+				}
+	});
+	
+});
+
+$(document).on('change', '#exp-city', function(){
+	exp_city_id = $(this).val();
+	exp_city_name = $('option:selected', this).attr('data-cityname');
+	
+	$.ajax({
+    			type:"GET",
+			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=experience",
+        headers:{token:token},
+    			dataType:"json",
+    			success: function(msg){
+					//alert("na we dey here");
+					if (msg.status ==1 ){
+
+						$.each(msg.data, function(key,value)
+                            {
+							   $('#exp-category').append('<option value="'+value.category_id+'" data-category="'+value.category+'">'+value.category+'</option>');
+							   });
+
+					}
+				}
+	});
+	
+});
+
+$(document).on('change', '#exp-category', function(){
+	exp_cate_id = $(this).val();
+	exp_cate_name = $('option:selected', this).attr('data-category');
+});
+
+$(document).on('click', '#btn-experience', function(){
+	category_id = exp_cate_id;
+	mainView.router.loadPage('shop-list.html');
+	
+});
