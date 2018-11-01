@@ -859,3 +859,8 @@ myApp.onPageInit('exp-cat-list', function (page) {
 		});
 	
 });
+
+$(document).on('click','#back-home', function () {
+    window.location.replace('inner.html');
+    return false;
+});
