@@ -209,7 +209,7 @@ $(document).on('click', 'a.cat-link', function(){
 	mainView.router.loadPage('shop-list.html');
 });
 
-$(document).on('click', 'a.cat-link', function(){
+$(document).on('click', 'a.exp-link', function(){
 
     category_name = $(this).attr('data-catname');
     category_id = $(this).attr('data-catid');
@@ -832,7 +832,7 @@ myApp.onPageInit('exp-cat-list', function (page) {
 	
 	$.ajax({
     			type:"POST",
-			url:"getproduct.php",
+			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
         headers:{"token":token},
 			data:{category_id: category_id, country_id: exp_country_id, city_id: exp_city_id},
     			dataType:"json",
@@ -900,11 +900,15 @@ myApp.onPageInit('experience-product', function (page) {
 
             if (msg.status ==1 ){
 
-                prdprice = msg.data.price;
+                prdprice = msg.data.package.adult.adult_price;
                 max_quant = msg.data.max_quantity;
-                img_url = msg.data.image[0].image_url;
+                img_url = msg.data.image[0];
                 product_name = msg.data.product_name;
-                hasvariant = msg.data.is_variant;
+                var duration = msg.data.duration;
+                var advance_book  = msg.data.advance_book;
+                var advance_format = msg.data.advance_book_format;
+                var exp_start_date = msg.data.start_date;
+
                 //delivery_type = msg.data.delivery_type;
 
 
