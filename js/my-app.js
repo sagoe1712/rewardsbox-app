@@ -742,7 +742,7 @@ $(document).on('change', '.drppickup', function(){
 $(document).on('change', '#exp-country', function(){
 	exp_country_id = $(this).val();
 	exp_country_name = $('option:selected', this).attr('data-name');
-	
+	let cityresult = ""
 	//fetches the city in the country
 	
 	$.ajax({
@@ -753,11 +753,12 @@ $(document).on('change', '#exp-country', function(){
     			success: function(msg){
 					//alert("na we dey here");
 					if (msg.status ==1 ){
-
+                        cityresult ="<option value = ''>Select State</option>";
 						$.each(msg.data, function(key,value)
                             {
-							   $('#exp-city').append('<option value="'+value.city_id+'" data-cityname="'+value.name+'">'+value.name+'</option>');
+							  cityresult +='<option value="'+value.city_id+'" data-cityname="'+value.name+'">'+value.name+'</option>';
 							   });
+                        $('#exp-city').html(cityresult);
 
 					}
 				}
@@ -795,7 +796,7 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-            	expcatlist += "<tr><td width='90%'><a class='cat-link' href='exp-list.html' data-catid='\"+value.category_id+\"' data-catname='\"+value.category+\"'>\"+value.category+\"</a></td><td width='10%'><a class='cat-link' href='exp-list.html' data-catid='\"+value.category_id+\"' data-catname='\"+value.category+\"'><i class='fa fa-chevron-right'></i></a></td></tr>";
+            	expcatlist += "<tr><td width='90%'><a class='cat-link' href='exp-list.html' data-catid='"+value.category_id+\"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
             })
             $('.list-categories').html(expcatlist);
         }
