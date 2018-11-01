@@ -76,11 +76,11 @@ input[type=text]:focus,input[type=email]:focus,input[type=number]:focus,input[ty
 }
 
 .login-content{
-	 background: #000 none repeat scroll 0 0 !important;
+	 background: #FCB017 none repeat scroll 0 0 !important;
 }
 
 .login-block {
-  background: #000 none repeat scroll 0 0;
+  background: #FCB017 none repeat scroll 0 0;
   color: #6d6d72;
   margin: 0;
 }
@@ -154,10 +154,10 @@ input[type=text]:focus,input[type=email]:focus,input[type=number]:focus,input[ty
   white-space: nowrap;
 }
 .panel-left {
-  background-color: #f15b65;
+  background-color: #3D1A57;
 }
 .panel-left .content-block {
-  background: #f15b65 none repeat scroll 0 0;
+  background: #3D1A57 none repeat scroll 0 0;
 }
 .panel .list-menu .list-group ul li.divider {
   background: inherit;
@@ -165,7 +165,7 @@ input[type=text]:focus,input[type=email]:focus,input[type=number]:focus,input[ty
   padding: 5px 0;
 }
 .panel {
-  background-color: #F15B65;
+  background-color: #3D1A57;
   border: 0 solid transparent;
   border-radius: 0;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -530,9 +530,9 @@ h2.product-name {
   text-align: center;
 }
 .corporate-icon i {
-  border: 8px solid #ec4445;
+  border: 8px solid #FCB017;
   border-radius: 100%;
-  color: #ec4445;
+  color: #3D1A57;
   font-size: 30px;
   height: 80px;
   line-height: 80px;
@@ -915,8 +915,8 @@ margin-bottom: 10px;}
   padding-bottom: 0;
 }
 .button.button-big {
-  background: #EC4445 none repeat scroll 0 0;
-  border: 1px solid #EC4445;
+  background: #3D1A57 none repeat scroll 0 0;
+  border: 1px solid #3D1A57;
   border-radius: 0;
   color: #fff;
   font-size: 17px;
@@ -1322,7 +1322,7 @@ tfoot{border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
   padding: 10px;
 }
 .registerbody {
-  background-color: #000;
+  background-color: #FCB017;
   height: 100%;
 }
 .register-content .inputbox > input {
@@ -1332,12 +1332,12 @@ tfoot{border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
   height:34px;
   padding:0 2%;
   width: 95%;
-  background: transparent;
-  border: 1px solid #5c5c5c;
-  color: #fff;
+  background: #fff;
+  border: none;
+  color: #000;
 }
 .inputbox > span {
-  color: #fff;
+  color: #3D1A57;
 }
 .inputbox {
   padding: 11px 0;
@@ -1392,4 +1392,8 @@ tfoot{border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
 
 .list-categories tr td{
 	padding: 10px !important;
+}
+
+.pages{
+	background: #FCB017 !important;
 }
