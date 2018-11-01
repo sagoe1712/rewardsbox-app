@@ -753,7 +753,7 @@ $(document).on('change', '#exp-country', function(){
     			success: function(msg){
 					//alert("na we dey here");
 					if (msg.status ==1 ){
-                        cityresult ="<option value = ''>Select State</option>";
+                        cityresult ="<option value = ''>Select City</option>";
 						$.each(msg.data, function(key,value)
                             {
 							  cityresult +='<option value="'+value.city_id+'" data-cityname="'+value.name+'">'+value.name+'</option>';
@@ -816,7 +816,7 @@ myApp.onPageInit('exp-cat-list', function (page) {
 	
 	$.ajax({
     			type:"POST",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
+			url:"getproduct.php",
         headers:{"token":token},
 			data:{category_id: category_id, country_id: exp_country_id, city_id: exp_city_id},
     			dataType:"json",
