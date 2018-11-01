@@ -1392,6 +1392,7 @@ tfoot{border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
 
 .list-categories tr td{
 	padding: 10px !important;
+  border-bottom: 1px solid #3D1A57 !important;
 }
 
 .pages{

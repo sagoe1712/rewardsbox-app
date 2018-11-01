@@ -782,6 +782,9 @@ $(document).on('click', '#btn-experience', function(){
 
 	myApp.onPageInit('experience-list', function (page) {
 	//myApp.alert("catalogue page loaded");
+
+		let expcatlist = "";
+
 $.ajax({
     type:"GET",
     url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=experience",
@@ -792,8 +795,9 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-                $('.list-categories').append("<tr><td width='90%'><a class='cat-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>");
+            	expcatlist += "<tr><td width='90%'><a class='cat-link' href='exp-list.html' data-catid='\"+value.category_id+\"' data-catname='\"+value.category+\"'>\"+value.category+\"</a></td><td width='10%'><a class='cat-link' href='exp-list.html' data-catid='\"+value.category_id+\"' data-catname='\"+value.category+\"'><i class='fa fa-chevron-right'></i></a></td></tr>";
             })
+            $('.list-categories').html(expcatlist);
         }
         else{
             alert(msg);
@@ -803,7 +807,7 @@ $.ajax({
 	
 });
 
-myApp.onPageInit('exp-list', function (page) {
+myApp.onPageInit('exp-cat-list', function (page) {
 	
 	$('#category-name').html(category_name);
 	
