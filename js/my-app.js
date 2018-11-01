@@ -221,7 +221,7 @@ $(document).on('click', 'a.cat-link', function(){
     			type:"POST",
 			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
         headers:{"token":token},
-			data:{category_id: category_id, country_id: exp_country_id, city_id: exp_city_id},
+			data:{category_id: category_id},
     			dataType:"json",
     			success: function(msg){
 
@@ -769,34 +769,88 @@ $(document).on('change', '#exp-city', function(){
 	exp_city_id = $(this).val();
 	exp_city_name = $('option:selected', this).attr('data-cityname');
 	
-	$.ajax({
-    			type:"GET",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=experience",
-        headers:{token:token},
-    			dataType:"json",
-    			success: function(msg){
-					//alert("na we dey here");
-					if (msg.status ==1 ){
+});
 
-						$.each(msg.data, function(key,value)
-                            {
-							   $('#exp-category').append('<option value="'+value.category_id+'" data-category="'+value.category+'">'+value.category+'</option>');
-							   });
 
-					}
-				}
-	});
+
+$(document).on('click', '#btn-experience', function(){
+	//category_id = exp_cate_id;
+	//category_name = exp_cate_name+" in "+exp_city_name+","+exp_country_name;
+	mainView.router.loadPage('experience2.html');
 	
 });
 
-$(document).on('change', '#exp-category', function(){
-	exp_cate_id = $(this).val();
-	exp_cate_name = $('option:selected', this).attr('data-category');
+	myApp.onPageInit('experience-list', function (page) {
+	//myApp.alert("catalogue page loaded");
+$.ajax({
+    type:"GET",
+    url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=experience",
+    headers:{"token":token},
+    dataType:"json",
+    success: function(msg){
+
+        if (msg.status ==1){
+            $.each(msg.data, function(key,value)
+            {
+                $('.list-categories').append("<tr><td width='90%'><a class='cat-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>");
+            })
+        }
+        else{
+            alert(msg);
+        }
+    }
+});
+	
 });
 
-$(document).on('click', '#btn-experience', function(){
-	category_id = exp_cate_id;
-	category_name = exp_cate_name+" in "+exp_city_name+","+exp_country_name;
-	mainView.router.loadPage('shop-list.html');
+myApp.onPageInit('exp-list', function (page) {
+	
+	$('#category-name').html(category_name);
+	
+	var prd_itm ="";
+	
+	$.ajax({
+    			type:"POST",
+			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
+        headers:{"token":token},
+			data:{category_id: category_id, country_id: exp_country_id, city_id: exp_city_id},
+    			dataType:"json",
+    			success: function(msg){
+
+					if (msg.status ==1){
+						 $.each(msg.data, function(key,value)
+                            {
+		 prd_itm += '<div class="single-shop-list">';
+		 prd_itm += '<div class="shop-inner">';
+		 prd_itm += '<div class="shop-img">';
+		 prd_itm += '<a href="single-product.html" class="product-link" data-product_code="'+value.product_code+'"><img src="'+value.image+'" alt=""/></a>';
+		 prd_itm += '</div>';
+		 prd_itm += '<div class="shop-content">';
+		 prd_itm += '<h3><a href="single-product.html" class="product-link" data-product_code="'+value.product_code+'">'+value.product+'</a></h3>';
+//		 prd_itm += '<div class="pro-rating-s">';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '</div>';							
+		 prd_itm += '<div class="price-box">';
+		 prd_itm += '<span class="new-price">N'+value.price+'</span>';
+		 prd_itm += '</div>';	
+		 prd_itm += '</div>';					
+		 prd_itm += '</div>';
+		 prd_itm += '</div>';
+					})
+						$('.shop-area').html(prd_itm);
+								}
+					else if(msg.status ==0){
+						$('.shop-area').append('<h3>There is no item in this category');
+					}
+					else{
+						alert("Status Code: "+msg.status+"\n"+msg.message);
+					}
+
+				}
+		});
 	
 });
