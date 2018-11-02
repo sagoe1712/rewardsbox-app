@@ -896,7 +896,8 @@ $(document).on('click','#returnsuccess', function(){
 
 
 myApp.onPageInit('experience-product', function (page) {
-    //alert(product_code);
+    alert(product_code);
+    alert("It reached here");
     //alert(category_id);
 
     $.ajax({
@@ -909,7 +910,7 @@ myApp.onPageInit('experience-product', function (page) {
             //	console.log(msg);
 
             productdetails.push(msg);
-
+alert(productdetails);
             if (msg.status ==1 ){
 
                 prdprice = msg.data.package.adult.adult_price;
