@@ -209,14 +209,16 @@ $.ajax({
 
 $(document).on('click', 'a.cat-link', function(){
 
-	 delete window.category_id;
+
+	 category_id = null;
 	category_name = $(this).attr('data-catname');
 	category_id = $(this).attr('data-catid');
 	mainView.router.loadPage('shop-list.html');
 });
 
 $(document).on('click', 'a.exp-link', function(){
-  	 delete window.category_id;
+
+		 category_id = null;
     category_name = $(this).attr('data-catname');
     category_id = $(this).attr('data-catid');
     mainView.router.loadPage('exp-list.html');
@@ -278,7 +280,7 @@ $(document).on('click', 'a.exp-link', function(){
 
 $(document).on('click', 'a.product-link', function(){
 
-	//product_code = "";
+	product_code = null;
 	product_code = $(this).attr('data-product_code');
 	//mainView.router.loadPage('single-product.html');
 
@@ -286,7 +288,7 @@ $(document).on('click', 'a.product-link', function(){
 
 $(document).on('click', 'a.exp-product-link', function(){
 
-    //product_code = "";
+    product_code = null;
     product_code = $(this).attr('data-product_code');
   //  mainView.router.loadPage('experience-product.html');
 
