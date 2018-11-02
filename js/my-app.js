@@ -208,15 +208,15 @@ $.ajax({
 
 
 $(document).on('click', 'a.cat-link', function(){
-	 category_id ="";
+
+	 delete window.category_id;
 	category_name = $(this).attr('data-catname');
 	category_id = $(this).attr('data-catid');
 	mainView.router.loadPage('shop-list.html');
 });
 
 $(document).on('click', 'a.exp-link', function(){
-     category_id="";
-
+  	 delete window.category_id;
     category_name = $(this).attr('data-catname');
     category_id = $(this).attr('data-catid');
     mainView.router.loadPage('exp-list.html');
@@ -890,7 +890,7 @@ myApp.onPageInit('exp-cat-list', function (page) {
 
 });
 $(document).on('click','#returnsuccess', function(){
-    window.location.replace('index.html');
+    window.location.replace('inner.html');
     return false;
 
 
