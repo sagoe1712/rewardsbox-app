@@ -194,7 +194,7 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-                $('.list-categories').append("<tr><td width='90%'><a class='exp-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='exp-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>");
+                $('.list-categories').append("<tr><td width='90%'><a class='exp-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='exp-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>");
             })
         }
         else{
@@ -208,14 +208,14 @@ $.ajax({
 
 
 $(document).on('click', 'a.cat-link', function(){
-	delete category_id;
+	category_id="";
 	category_name = $(this).attr('data-catname');
 	category_id = $(this).attr('data-catid');
 	mainView.router.loadPage('shop-list.html');
 });
 
 $(document).on('click', 'a.exp-link', function(){
-    delete category_id;
+	category_id="";
 
     category_name = $(this).attr('data-catname');
     category_id = $(this).attr('data-catid');
@@ -826,7 +826,7 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-            	expcatlist += "<tr><td width='90%'><a class='cat-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='exp-list.html' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
+            	expcatlist += "<tr><td width='90%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
             })
             $('.list-categories').html(expcatlist);
         }

@@ -251,7 +251,7 @@ input[type=text]:focus,input[type=email]:focus,input[type=number]:focus,input[ty
 
 .center.sliding{
   text-align: center !important;
-  margin-left: 30px !important;;
+  margin-left: 60px !important;;
 }
 .navbar-inner h2 {
   font-size: 25px;
