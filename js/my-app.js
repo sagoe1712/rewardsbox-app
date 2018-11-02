@@ -34,6 +34,10 @@ var exp_city_id;
 var exp_city_name;
 var exp_cate_id;
 var exp_cate_name;
+var exp_adult_price;
+var exp_child_price;
+var exp_location_id;
+var exp_location_name;
 
 var myApp = new Framework7();
 
@@ -905,104 +909,112 @@ myApp.onPageInit('experience-product', function (page) {
                 img_url = msg.data.image[0];
                 product_name = msg.data.product_name;
                 var duration = msg.data.duration;
-                var advance_book  = msg.data.advance_book;
-                var advance_format = msg.data.advance_book_format;
                 var exp_start_date = msg.data.start_date;
+                var exp_end_date = msg.data.end_date;
+                exp_adult_price = msg.data.package.adult.adult_price;
+                exp_child_price = msg.data.package.kid.kid_price;
+                var has_adult = [];
+                has_adult.push(msg.data.package.adult);
+                var has_kid = [];
+                has_kid.push(msg.data.package.kid);
+                var has_pickup = [];
+                has_pickup.push(msg.data.location.pickup_address);
+                advance_book = msg.data.advance_book;
+                advance_book_format = msg.data.advance_book_format;
+
+                var has_faqs = [];
+                has_pickup.push(msg.data.faqs);
+
 
                 //delivery_type = msg.data.delivery_type;
 
 
                 let result = "";
+                let resultqty = "";
+                let resultpickup ="";
+                let resultadvance ="";
+                let resultfaqs ="";
 
                 result += '<div class="single-product">';
                 result += '<div class="single-product-img">';
-                result += '<a href="#"><img src="'+msg.data.image[0].image_url+'" alt="" /></a>';
+                result += '<a href="#"><img src="'+img_url+'" alt="" /></a>';
                 result += '</div>';
                 result += '<div class="single-product-content">';
-                result += '<h1 class="product_title">'+msg.data.product_name+'</h1>';
+                result += '<h1 class="product_title">'+product_name+'</h1>';
                 result += '<div class="price-box">';
-                result += '<span class="new-price product-price">N '+msg.data.price+'</span>';
+                result += '<span class="new-price"></span>';
                 result += '</div>';
-//						result += '<div class="pro-rating">';
-//						result += '<a href="#"><i class="fa fa-star"></i></a>';
-//						result += '<a href="#"><i class="fa fa-star"></i></a>';
-//						result += '<a href="#"><i class="fa fa-star"></i></a>';
-//						result += '<a href="#"><i class="fa fa-star"></i></a>';
-//						result += '<a href="#"><i class="fa fa-star"></i></a>';
-//						result += '</div>';
                 result += '<div class="short-description">';
-                result += '<p>'+msg.data.description+'</p>';
-                result += '</div>';
+                result += msg.data.description;
                 result += '<form action="#">';
-
-                let result2 = "";
-                if (msg.data.delivery_type == 1){
-                    delivery_type = 1;
-                    result2+='<p class=""><input type="radio" class="rad-delmet" value="1" checked="checked"/>';
-                    result2+='Pickup';
-                    result2 +='</p><p><select class="constant-pickup drppickup">';
-                    result2 +='<option>Pickup Location</option>';
-
-                    $.each(msg.data.branch_details, function(key,value)
-                    {
-                        result2 +=('<option value="'+value.branch_id+'">'+value.branch_name+'</option>');
-                    });
-                    result2 +='</select></p>';
-                    // $('.div-cat-itm-info').html(result2);
-                    delivery_type = 1;
-                }
-
-
-
-                else if (msg.data.delivery_type == 2){
-                    delivery_type = 2;
-
-                    result2 +='<div><input type="radio" class="rad-delmet" value="2" checked="checked"/> Delivery</div>';
-
-                }
-                else if(msg.data.delivery_type == 3){
-                    mdt = 3;
-                    result2 +='<p><input type="radio" class="rad-delmet" value="2" name="rad-delmet" id="rad-del" /> Delivery <input type="radio" class="rad-delmet" value="1" name="rad-delmet" id="rad-pickup" /> Pickup</p><p class="div-sel-pickup" style="display:none;"><select class="constant-pickup drppickup"><option value="">Pickup Location</option>';
-                    $.each(msg.data.branch_details, function(key,value1)
-                    {
-                        result2+='<option value="'+value1.branch_id+'"  data-branchname="'+value1.branch_name+'">'+value1.branch_name+'</option>';
-                    });
-                    result2+='</select></p>';
-                    delivery_type = 2;
-                }
-
-                if (msg.data.is_variant == 1){//It is a boolean to show product has some attributes 1 is true and 0 is false
-
-                    result2+='<div class="varient-div">';
-
-                    $.each(msg.data.attributes, function(key2,attributes)
-                    {
-                        result2+='<p><select data-name ="'+attributes.name+'" class="sel-varient constant-pickup" id="'+attributes.id+'"><option value="">Select '+attributes.name+'</option>';
-                        $.each(attributes.details, function(key3,details)
-                        {
-                            result2+='<option value="'+details.variant_id+'">'+details.variant_name+'</option>';
-                        });
-                        result2 +='</select></p>';
-                    });
-
-                    result2 +='</div>';
-
-                    $.each(msg.data.combinations, function(key,comb)
-                    {
-                        mixes.push([comb]);
-                    });
-
-                }
-
-                result += result2;
-
                 result += '<div class="quantity">';
-                result += '<input type="number" id="itm-quant" value="1" min="1" max="'+msg.data.max_quantity+'" placeholder="Quantity">';
-                result += '<a href="#" id="btn-buy">Buy Now</a>';
+                if(has_adult.length != 0) {
+                    resultqty += '<div><input type="number" value="1">';
+                    resultqty += 'Adult(s) (Price: <span id="adultprice">'+msg.data.package.adult_price+'</span>)<br>(Min Qty: '+msg.data.package.min_adult+' and Max Qty: '+msg.data.package.min_kid+')</div>';
+                    resultqty += '<br>';
+                }
+                if (has_kid.length != 0) {
+                    resultqty += '<div>  <input type="number" value="1">';
+                    resultqty += 'Kid(s) (Price: <span id="kidprice">'+msg.data.package.kid_price+'</span>)<br>(Min Qty: '+msg.data.package.min_kid+' and Max Qty: '+msg.data.package.max_kid+')</div>';
+                }
+                result += resultqty;
                 result += '</div>';
+
+                result += '<div>';
+                result += '<select class="inputtype">';
+                result += '<option>Select Location</option>';
+                $.each(msg.data.location, function(key,value) {
+                    result += '<option value="' + value.id + '">"' + value.store_name + '" ' + value.exp_address + ' ' + value.city + '</option>';
+                });
+                result += '</select>';
+                result += '</div>';
+
+
+
+                if (has_pickup.length > 0) {
+                    resultpickup += '<div>';
+                    resultpickup += '<select class="inputtype">';
+                    resultpickup += '<option value="">Select Pick up Location</option>';
+                    resultpickup += '</select>';
+                    resultpickup += ' </div>';
+                }
+                result += resultpickup;
+
+                if (advance_book != null || advance_book > 0)
+				{
+					resultadvance = '<p>Book before '+advance_book+' '+advance_book_format+'</p>';
+                }
+
+                result += resultadvance;
+
+                result += '<div style="width: 100% !important;">';
+                result += '<div style="width: 40% !important;">';
+                result += '<input type="date" min="'+msg.data.start_date+'" max="'+msg.data.end_date+'" id="date-slot" class="inputtype" style="max-width: 100% !important;">';
+                result += '</div>';
+
+                result += '<div style="width: 40% !important;">';
+                result += '<select id="time-slot" class="inputtype" style="width: 100% !important;">';
+                result += '<option value="">Select Time Slot<option>';
+                result += '</select>';
+                result += '</div>';
+                result += '</div>';
+                result += '<button class="button button-big">Buy Now</button>';
                 result += '</form>';
-                result += '</div>';
-                result += '</div>';
+
+                if(has_faqs.length > 0) {
+                    resultfaqs += '<div class="div-faq">';
+                    resultfaqs += '<h2>FAQs</h2>';
+
+                    $.each(msg.data.faqs, function(key,value2) {
+                        resultfaqs += '<b>'+value2.question+'</b>';
+                        resultfaqs += '<p>'+value2.answer+'</p><br><br>';
+                    });
+
+                    resultfaqs += '</div>';
+                }
+
+
+
 
 
 
