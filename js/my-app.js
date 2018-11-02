@@ -848,10 +848,10 @@ myApp.onPageInit('exp-cat-list', function (page) {
 		 prd_itm += '<div class="single-shop-list">';
 		 prd_itm += '<div class="shop-inner">';
 		 prd_itm += '<div class="shop-img">';
-		 prd_itm += '<a href="single-product.html" class="product-link" data-product_code="'+value.product_code+'"><img src="'+value.image+'" alt=""/></a>';
+		 prd_itm += '<a href="experience-product.html" class="product-link" data-product_code="'+value.product_code+'"><img src="'+value.image+'" alt=""/></a>';
 		 prd_itm += '</div>';
 		 prd_itm += '<div class="shop-content">';
-		 prd_itm += '<h3><a href="single-product.html" class="product-link" data-product_code="'+value.product_code+'">'+value.product+'</a></h3>';
+		 prd_itm += '<h3><a href="experience-product.html" class="product-link" data-product_code="'+value.product_code+'">'+value.product+'</a></h3>';
 //		 prd_itm += '<div class="pro-rating-s">';
 //		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
 //		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
