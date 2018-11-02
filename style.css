@@ -248,6 +248,10 @@ input[type=text]:focus,input[type=email]:focus,input[type=number]:focus,input[ty
 .center.sliding > h4 {
   margin-bottom: 0;
 }
+
+.center.sliding{
+  text-align: center !important;
+}
 .navbar-inner h2 {
   font-size: 25px;
   font-weight: 600;
@@ -643,6 +647,7 @@ h2.product-name {
 }
 .single-shop-list .shop-img a img {
   width: 100%;
+  max-width: 100% !important;
 }
 .single-shop-list {
   margin-bottom: 15px;
@@ -691,7 +696,7 @@ h1.product_title {
   width: 90px;
 }
 .quantity a {
-  background: #252525 none repeat scroll 0 0;
+  background: #3D1A57 none repeat scroll 0 0;
   border: medium none;
   border-radius: 0;
   box-shadow: none;
@@ -1198,7 +1203,7 @@ table tr th.width-4 {
   height: 23px;
   margin-right: 5px;
   padding: 5px;
-  width: 225px;
+  width: 100%;
 }
 
 select.inputtype{
