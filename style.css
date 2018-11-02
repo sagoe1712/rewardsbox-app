@@ -10,10 +10,10 @@
 
 
 -----------------------------------------------------------------------------------
-    
+
     CSS INDEX
     ===================
-	
+
 	1. Theme Default CSS (body, link color, section etc)
   2. left side ber css
   3. home css
@@ -25,7 +25,7 @@
   9. shop page css
   10. blog page css
   11. dashboard css
-  12. portfolio css 
+  12. portfolio css
   13. sopping cart css
   14. Check out page css
   15. register login  page css
@@ -251,7 +251,7 @@ input[type=text]:focus,input[type=email]:focus,input[type=number]:focus,input[ty
 
 .center.sliding{
   text-align: center !important;
-  margin-left: 60px !important;;
+  margin-left: 80px !important;;
 }
 .navbar-inner h2 {
   font-size: 25px;
@@ -1043,7 +1043,7 @@ h2.tran-title{}
 }
 .sale-list ul li:last-child {
   border-bottom:none;
-  
+
 }
 .sale-list ul li i {
   color: #81c868;
@@ -1071,7 +1071,7 @@ width: 115px;}
 }
 .revenue-sales{background:#4099FF }
 /*------------------------
-12. portfolio css 
+12. portfolio css
 --------------------------*/
 .portfolio-desc p{}
 .img-box img {
