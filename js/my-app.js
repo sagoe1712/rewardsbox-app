@@ -216,13 +216,14 @@ $(document).on('click', 'a.cat-link', function(){
 	mainView.router.loadPage('shop-list.html');
 });
 
-$(document).on('click', 'a.exp-link', function(){
-
-		 category_id = null;
-    category_name = $(this).attr('data-catname');
-    category_id = $(this).attr('data-catid');
-    mainView.router.loadPage('exp-list.html');
+$(document).on('click','a.exp-list-link',function(){
+	category_id = null;
+ category_name = $(this).attr('data-catname');
+ category_id = $(this).attr('data-catid');
+ mainView.router.loadPage('exp-list.html');
 });
+
+
 
 
 
@@ -830,7 +831,7 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-            	expcatlist += "<tr><td width='90%'><a class='exp-product-link href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='exp-product-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
+            	expcatlist += "<tr><td width='90%'><a class='exp-list-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='exp-list-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
             })
             $('.list-categories').html(expcatlist);
         }
@@ -899,6 +900,7 @@ $(document).on('click','#returnsuccess', function(){
 
 
 });
+
 
 
 myApp.onPageInit('experience-product', function (page) {
