@@ -1054,3 +1054,7 @@ $(document).on('change','#day_slot', function() {
     });
     $('#time-slot').html(result);
 });
+
+$(document).on('click','#clear-cat-id', function() {
+		category_id ="";
+});
