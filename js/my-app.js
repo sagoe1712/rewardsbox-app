@@ -38,6 +38,7 @@ var exp_adult_price;
 var exp_child_price;
 var exp_location_id;
 var exp_location_name;
+var exp_day_slot = [];
 
 var myApp = new Framework7();
 
@@ -795,7 +796,7 @@ $(document).on('change', '#exp-city', function(){
 
 $(document).on('click', '#btn-experience', function(){
 	//category_id = exp_cate_id;
-	//category_name = exp_cate_name+" in "+exp_city_name+","+exp_country_name;
+	category_name = exp_cate_name;
 
 	if(exp_country_id == ""){
 		myApp.alert("Kindly Select A Country");
@@ -896,13 +897,13 @@ $(document).on('click','#returnsuccess', function(){
 
 
 myApp.onPageInit('experience-product', function (page) {
-    alert(product_code);
-    alert("It reached here");
+
     //alert(category_id);
 
     $.ajax({
         type:"GET",
-        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=product_details&product_code="+product_code,
+        //url:"getproduct_details.php",
+       url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=product_details&product_code="+product_code,
         headers:{"token":token},
         dataType:"json",
         success: function(msg){
@@ -910,10 +911,10 @@ myApp.onPageInit('experience-product', function (page) {
             //	console.log(msg);
 
             productdetails.push(msg);
-alert(productdetails);
             if (msg.status ==1 ){
 
-                prdprice = msg.data.package.adult.adult_price;
+                var adult_price = msg.data.package.adult.adult_price;
+                //var child_price = msg.data.package.kid.kid_price;
                 max_quant = msg.data.max_quantity;
                 img_url = msg.data.image[0];
                 product_name = msg.data.product_name;
@@ -921,18 +922,19 @@ alert(productdetails);
                 var exp_start_date = msg.data.start_date;
                 var exp_end_date = msg.data.end_date;
                 exp_adult_price = msg.data.package.adult.adult_price;
-                exp_child_price = msg.data.package.kid.kid_price;
+                //exp_child_price = msg.data.package.kid.kid_price;
                 var has_adult = [];
                 has_adult.push(msg.data.package.adult);
                 var has_kid = [];
                 has_kid.push(msg.data.package.kid);
                 var has_pickup = [];
                 has_pickup.push(msg.data.location.pickup_address);
+                exp_day_slot.push(msg.data.day_slots);
                 advance_book = msg.data.advance_book;
                 advance_book_format = msg.data.advance_book_format;
 
                 var has_faqs = [];
-                has_pickup.push(msg.data.faqs);
+                has_faqs.push(msg.data.faqs);
 
 
                 //delivery_type = msg.data.delivery_type;
@@ -957,12 +959,13 @@ alert(productdetails);
                 result += msg.data.description;
                 result += '<form action="#">';
                 result += '<div class="quantity">';
-                if(has_adult.length != 0) {
-                    resultqty += '<div><input type="number" value="1">';
-                    resultqty += 'Adult(s) (Price: <span id="adultprice">'+msg.data.package.adult_price+'</span>)<br>(Min Qty: '+msg.data.package.min_adult+' and Max Qty: '+msg.data.package.min_kid+')</div>';
+                console.log(result);
+                if(has_adult.length != null) {
+                    resultqty += '<div><input type="number" value="'+msg.data.package.adult.min_adult+'">';
+                    resultqty += 'Adult(s) (Price: <span id="adultprice">'+msg.data.package.adult.adult_price+'</span>)<br>(Min Qty: '+msg.data.package.adult.min_adult+' and Max Qty: '+msg.data.package.adult.max_adult+')</div>';
                     resultqty += '<br>';
                 }
-                if (has_kid.length != 0) {
+                if (has_kid.length != null) {
                     resultqty += '<div>  <input type="number" value="1">';
                     resultqty += 'Kid(s) (Price: <span id="kidprice">'+msg.data.package.kid_price+'</span>)<br>(Min Qty: '+msg.data.package.min_kid+' and Max Qty: '+msg.data.package.max_kid+')</div>';
                 }
@@ -970,21 +973,21 @@ alert(productdetails);
                 result += '</div>';
 
                 result += '<div>';
-                result += '<select class="inputtype">';
+                result += '<p><select class="inputtype">';
                 result += '<option>Select Location</option>';
                 $.each(msg.data.location, function(key,value) {
                     result += '<option value="' + value.id + '">"' + value.store_name + '" ' + value.exp_address + ' ' + value.city + '</option>';
                 });
-                result += '</select>';
+                result += '</select></p><br><br>';
                 result += '</div>';
 
 
 
                 if (has_pickup.length > 0) {
                     resultpickup += '<div>';
-                    resultpickup += '<select class="inputtype">';
+                    resultpickup += '<p><select class="inputtype">';
                     resultpickup += '<option value="">Select Pick up Location</option>';
-                    resultpickup += '</select>';
+                    resultpickup += '</select></p><br>';
                     resultpickup += ' </div>';
                 }
                 result += resultpickup;
@@ -996,17 +999,14 @@ alert(productdetails);
 
                 result += resultadvance;
 
-                result += '<div style="width: 100% !important;">';
-                result += '<div style="width: 40% !important;">';
-                result += '<input type="date" min="'+msg.data.start_date+'" max="'+msg.data.end_date+'" id="date-slot" class="inputtype" style="max-width: 100% !important;">';
-                result += '</div>';
+                result += '<div>';
+                result += '<input type="date" min="'+msg.data.start_date+'" max="'+msg.data.end_date+'" id="date-slot" class="inputtype" style="width:98% !important;"><br><br>';
 
-                result += '<div style="width: 40% !important;">';
+
                 result += '<select id="time-slot" class="inputtype" style="width: 100% !important;">';
                 result += '<option value="">Select Time Slot<option>';
                 result += '</select>';
-                result += '</div>';
-                result += '</div>';
+                result += '</div><br><br>';
                 result += '<button class="button button-big">Buy Now</button>';
                 result += '</form>';
 
@@ -1016,7 +1016,7 @@ alert(productdetails);
 
                     $.each(msg.data.faqs, function(key,value2) {
                         resultfaqs += '<b>'+value2.question+'</b>';
-                        resultfaqs += '<p>'+value2.answer+'</p><br><br>';
+                        resultfaqs += '<p>'+value2.answer+'</p>';
                     });
 
                     resultfaqs += '</div>';
@@ -1027,7 +1027,9 @@ alert(productdetails);
 
                 prod_signature = msg.data.signature;
 
-                $('.single-product-area').html(result)
+
+
+                $('.single-product-area').html(result);
             }
             else{
                 $('.single-product-area').html("Status Code: "+msg.status+"\n"+msg.message);
@@ -1035,4 +1037,19 @@ alert(productdetails);
 
         }
     });
+});
+
+$(document).on('change','#day_slot', function() {
+    var day_slot = $('#day_slot').val();
+    var day_obj = new Date(day_slot);
+    var day_no = day_obj.getDay();
+
+    let result = "";
+
+
+    result += '<option value="">Select Time Slot..</option>';
+    $.each(exp_day_slot[day_no], function(key,slot) {
+        result += '<option value="">'+slot.start_time+' '+ slot.start_time_period+'</option>';
+    });
+    $('#time-slot').html(result);
 });
