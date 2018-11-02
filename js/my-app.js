@@ -830,7 +830,7 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-            	expcatlist += "<tr><td width='90%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
+            	expcatlist += "<tr><td width='90%'><a class='exp-product-link href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='exp-product-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
             })
             $('.list-categories').html(expcatlist);
         }
