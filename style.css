@@ -1509,3 +1509,26 @@ div [data-page="shopping-cart"] .inputtype{
 div [data-page="shopping-cart"] u{
   border-color: #FCB017 !important;
 }
+
+.max-img{
+  max-width: 100% !important;
+}
+
+.white-text{
+  color: #fff !important;
+}
+
+.content-block-inner::after {
+  background: none !important;
+}
+
+.myprofile table{
+    width: 100% !important;
+    color: #3D1A57 !important;
+    border-left: none !important;
+}
+
+.myprofile table tr td{
+    border-bottom: 1px solid #ccc !important;
+    padding: 20px 0px !important;
+}

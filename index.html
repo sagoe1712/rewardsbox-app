@@ -5,7 +5,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <!-- Your app title -->
-    <title>ECOM - Mobile &amp; App HTML Template</title>
+    <title>Rewardsbox - Mobile &amp; App HTML Template</title>
     <!-- Path to Framework7 Library CSS, iOS Theme -->
     <link rel="stylesheet" href="css/framework7.ios.min.css">
     <!-- Path to Framework7 color related styles, iOS Theme -->
@@ -17,20 +17,18 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <!-- Status bar overlay for full screen mode (PhoneGap) -->
-    <div class="statusbar-overlay"></div>
-    <!-- Left panel with reveal effect-->
-    <!-- Panels overlay-->
-    <div class="panel-overlay"></div>
-<!-- menu end -->
-
-
+  <!-- Status bar overlay for full screen mode (PhoneGap) -->
+  <div class="statusbar-overlay"></div>
+  <!-- Left panel with reveal effect-->
+  <!-- Panels overlay-->
+  <div class="panel-overlay"></div>
     <!-- Views -->
     <div class="views">
       <!-- Your main view, should have "view-main" class -->
       <div class="view view-main" data-page="index">
         <!-- Top Navbar-->
-
+          <div class="navbar" style="background: transparent !important;">
+          </div>
         <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
 
 		  <div class="pages">
@@ -51,6 +49,7 @@
 											<span>Password:</span><br>
 											<input type="password" id="pwdPass" name="password" placeholder="***********" style="width: 100% !important;">
 										</div>
+                                        <a href="forget-password.html">Forgot Password?</a>
 										<div class="inputbox">
 											<button class="button button-big" id="btn-login">Login</button>
 										</div>
