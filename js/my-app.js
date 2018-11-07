@@ -5,6 +5,7 @@ var custvar = [];
 var proditm = [];
 var quantity;
 var prdprice;
+var unitprice;
 var category_id;
 var category_name;
 var product_code;
@@ -184,8 +185,11 @@ $(document).on('click','#logout', function(){
 
 	myApp.onPageInit('catalogue', function (page) {
 	//myApp.alert("catalogue page loaded");
+        var colors = ["#FCB017", "#3D1A57", "#f00", "#99cc00", "#f60"];
+        var i = 0;
 $.ajax({
     type:"GET",
+	//url:"getcategories.php",
     url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=catalogue",
     headers:{"token":token},
     dataType:"json",
@@ -194,7 +198,9 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-                $('.list-categories').append("<tr><td width='90%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>");
+
+                $('.list-categories').append("<tr><td width='10%'><i class='fa fa-star' style='color: "+colors[i]+" !important;'></i></td><td width='80%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right' style='color: #FCB017 !important;'></i></a></td></tr>");
+                i++;
             })
         }
         else{
@@ -236,7 +242,8 @@ $(document).on('click','a.exp-list-link',function(){
 	$.ajax({
     			type:"POST",
 			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
-        headers:{"token":token},
+		//url:"getproduct.php",
+		headers:{"token":token},
 			data:{category_id: category_id},
     			dataType:"json",
     			success: function(msg){
@@ -247,10 +254,10 @@ $(document).on('click','a.exp-list-link',function(){
 		 prd_itm += '<div class="single-shop-list">';
 		 prd_itm += '<div class="shop-inner">';
 		 prd_itm += '<div class="shop-img">';
-		 prd_itm += '<a href="#" class="cat-product-link" data-product_code="'+value.product_code+'"><img src="'+value.image+'" alt=""/></a>';
+		 prd_itm += '<img src="'+value.image+'" alt=""/>';
 		 prd_itm += '</div>';
 		 prd_itm += '<div class="shop-content">';
-		 prd_itm += '<h3><a href="#" class="cat-product-link" data-product_code="'+value.product_code+'">'+value.product+'</a></h3>';
+		 prd_itm += '<h3>'+value.product+'</h3>';
 //		 prd_itm += '<div class="pro-rating-s">';
 //		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
 //		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
@@ -261,6 +268,7 @@ $(document).on('click','a.exp-list-link',function(){
 		 prd_itm += '<div class="price-box">';
 		 prd_itm += '<span class="new-price">N'+value.price+'</span>';
 		 prd_itm += '</div>';
+		 prd_itm += '<a href="#" class="button btn-details cat-product-link" data-product_code="'+value.product_code+'">Details</a>'
 		 prd_itm += '</div>';
 		 prd_itm += '</div>';
 		 prd_itm += '</div>';
@@ -268,7 +276,7 @@ $(document).on('click','a.exp-list-link',function(){
 						$('.shop-area').html(prd_itm);
 								}
 					else if(msg.status ==0){
-						$('.shop-area').append('<h3>There is no item in this category');
+						$('.shop-area').append('<h3>There is no item in this category</h3>');
 					}
 					else{
 						alert("Status Code: "+msg.status+"\n"+msg.message);
@@ -305,7 +313,9 @@ $(document).on('click', 'a.exp-product-link', function(){
 	$.ajax({
     			type:"POST",
 			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=product_details&product_code="+product_code,
-  headers:{"token":token},
+        //url:"getproduct_details.php",
+
+        headers:{"token":token},
       data:{category_id: category_id},
     			dataType:"json",
     			success: function(msg){
@@ -317,6 +327,7 @@ $(document).on('click', 'a.exp-product-link', function(){
 					if (msg.status ==1 ){
 
 						prdprice = msg.data.price;
+						unitprice = msg.data.price;
 						max_quant = msg.data.max_quantity;
 						img_url = msg.data.image[0].image_url;
 						product_name = msg.data.product_name;
@@ -523,7 +534,7 @@ $(document).on('click', '#btn-buy', function(){
                  prod_quant = $('#itm-quant').val();
                  //myApp.alert(delivery_type);
                  //alert('reached here');
-                 mainView.router.loadPage('shopping-cart.html');
+                 mainView.router.loadPage('summary.html');
                  //myApp.router.loadPage('shopping-cart.html');
                  //	mainView.router.navigate('shopping-cart.html');
                  //myApp.router.navigate('shopping-cart.html');
@@ -578,51 +589,40 @@ myApp.onPageInit('shopping-cart', function (page) {
 				}
 
 
-							result = '<tr class="carttr_1">';
-							result += '<td>';
-							result += '<div class="cartpage-image">';
-							result += '<a href="#"><img alt="" src="'+img_url+'"></a>';
-							result += '</div>';
-							result += '</td>';
-							result += '<td>';
-							result += '<div class="cartpage-pro-dec">';
-							result += '<p><a href="#">'+product_name+'</a></p>';
-							result += '<span>'+delivery_name+'</span>'
-	 							if(delivery_type==1){
-									result2 = '<span>'+branch_name+'</span>';
-									result += result2;
-									}
-							result += '</div>';
-							result += '</td>';
-							result += '<td>';
-							result += '<div class="unite-price">';
-							result += '<p>'+prdprice+'</p>';
-							result += '</div>';
-							result += '</td>';
-							result += '<td>';
-							result += '<div class="cart-quty">';
-							result += '<input type="number" min="1" value="'+prod_quant+'" max="'+max_quant+'">';
-							result += '</div>';
-							result += '</td>';
-							result += '<td>';
-							result += '<div class="subtotal">';
-							result += '<p id="col-tot-price">'+prdprice+'</p>';
-							result += '</div>';
-							result += '</td>';
-							result += '<td>';
-							result += '<div class="cartpage-delete-item">';
-							result += '<a title="Remove item" href="#"><i class="fa fa-trash-o"></i></a>';
-							result += '</div>';
-							result += '</td>';
-							result += '</tr>';
+    result = '<tr>';
+    result += '<td classs="summary-td-img">';
+    result += '<div class="shop-img"><img src="'+img_url+'"></div>';
+    result += '</td>';
+    result += '<td classs="summary-td-content">';
+    result += '<h2 class="summary-prd-name">'+product_name+'</h2>';
+    result += '<h2 class="summary-unit-price yellow-text">'+unitprice+'</h2>';
+    result += 'Qty <input type="number" id="summ-upd-qty" class="summ-qty" min="1" value="'+prod_quant+'" max="'+max_quant+'"> <a href="#" class="btn-summ-update" style="display: none;">Update</a>';
+    result += '<p>'+delivery_name+'</p>';
+    if(delivery_type==1) {
+        result += '<p>'+branch_name+'</p>';
+    }
+    result += '</td>';
+    result += '</tr>';
 
-                        $('.table-prd-item').html(result);
+
+
+                      $('.table-prd-item').html(result);
 						totalprice();
                         totalshipitm();
 
 
 });
 
+$(document).on('click', '.btn-summ-update', function () {
+	prod_quant = $('#summ-upd-qty').val();
+	totalprice();
+    totalshipitm();
+    $('.btn-summ-update').hide();
+});
+
+$(document).on('change', '#summ-upd-qty', function() {
+	$('.btn-summ-update').show();
+});
 
 $(document).on('change', '#delivery-state', function(){
 	state_id = $('#delivery-state').val();
@@ -728,19 +728,14 @@ $(document).on('click', '#btn-checkout', function(){
 
 });
 
-myApp.onPageInit('success-page', function (page) {
+myApp.onPageInit('success-page', function () {
 		$('#vouch').html(voucher_code);
 		$('#orderno').html(order_no);
 });
 
-	$(document).on('click', '#change-qty', function(){
-		 prod_quant = $('#itm-quant').val();
-			totalprice();
-	});
 
+myApp.onPageInit('experience', function () {
 
-
-myApp.onPageInit('experience', function (page) {
 	$.ajax({
     			type:"GET",
 			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_country",
@@ -818,6 +813,8 @@ $(document).on('click', '#btn-experience', function(){
 
 	myApp.onPageInit('experience-list', function (page) {
 	//myApp.alert("catalogue page loaded");
+        var colors = ["#FCB017", "#3D1A57", "#f00", "#99cc00", "#f60"];
+        var i = 0;
 
 		let expcatlist = "";
 
@@ -831,7 +828,8 @@ $.ajax({
         if (msg.status ==1){
             $.each(msg.data, function(key,value)
             {
-            	expcatlist += "<tr><td width='90%'><a class='exp-list-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='exp-list-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
+            	expcatlist += "<tr><td width='10%'><i class='fa fa-star' style='color: "+colors[i]+" !important;'></i></td><td width='80%'><a class='exp-list-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='exp-list-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
+            	i++;
             })
             $('.list-categories').html(expcatlist);
         }
@@ -843,7 +841,7 @@ $.ajax({
 
 });
 
-myApp.onPageInit('exp-cat-list', function (page) {
+myApp.onPageInit('exp-cat-list', function () {
 
 	$('#category-name').html(category_name);
 
@@ -860,26 +858,21 @@ myApp.onPageInit('exp-cat-list', function (page) {
 					if (msg.status ==1){
 						 $.each(msg.data, function(key,value)
                             {
-		 prd_itm += '<div class="single-shop-list">';
-		 prd_itm += '<div class="shop-inner">';
-		 prd_itm += '<div class="shop-img">';
-		 prd_itm += '<a href="#" class="exp-product-link" data-product_code="'+value.product_code+'"><img src="'+value.image+'" alt=""/></a>';
-		 prd_itm += '</div>';
-		 prd_itm += '<div class="shop-content">';
-		 prd_itm += '<h3><a href="#" class="exp-product-link" data-product_code="'+value.product_code+'">'+value.product+'</a></h3>';
-//		 prd_itm += '<div class="pro-rating-s">';
-//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
-//		 prd_itm += '</div>';
-		 prd_itm += '<div class="price-box">';
-		 prd_itm += '<span class="new-price">N'+value.price+'</span>';
-		 prd_itm += '</div>';
-		 prd_itm += '</div>';
-		 prd_itm += '</div>';
-		 prd_itm += '</div>';
+
+                                prd_itm += '<div class="single-shop-list">';
+                                prd_itm += '<div class="shop-inner">';
+                                prd_itm += '<div class="shop-img">';
+                                prd_itm += '<img src="'+value.image+'" alt=""/>';
+                                prd_itm += '</div>';
+                                prd_itm += '<div class="shop-content">';
+                                prd_itm += '<h3>'+value.product+'</h3>';
+                                prd_itm += '<div class="price-box">';
+                             prd_itm += '</div>';
+                             prd_itm += '<a href="#" class="button btn-details exp-product-link" data-product_code="'+value.product_code+'">Details</a>'
+                             prd_itm += '</div>';
+                             prd_itm += '</div>';
+                             prd_itm += '</div>';
+
 					})
 						$('.shop-area').html(prd_itm);
 								}
