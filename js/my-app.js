@@ -385,7 +385,7 @@ $(document).on('click', 'a.exp-product-link', function(){
 							}
 						else if(msg.data.delivery_type == 3){
               mdt = 3;
-								result2 +='<p><input type="radio" class="rad-delmet" value="2" name="rad-delmet" id="rad-del" /> Delivery <input type="radio" class="rad-delmet" value="1" name="rad-delmet" id="rad-pickup" /> Pickup</p><p class="div-sel-pickup" style="display:none;"><select class="constant-pickup drppickup"><option value="">Pickup Location</option>';
+								result2 +='<p><input type="radio" class="rad-delmet rad-opt-met" value="2" name="rad-delmet" id="rad-del" /> Delivery <input type="radio" class="rad-delmet rad-opt-met" value="1" name="rad-delmet" id="rad-pickup" /> Pickup</p><p class="div-sel-pickup" style="display:none;"><select class="constant-pickup drppickup"><option value="">Pickup Location</option>';
 							 $.each(msg.data.branch_details, function(key,value1)
                             {
 								 result2+='<option value="'+value1.branch_id+'"  data-branchname="'+value1.branch_name+'">'+value1.branch_name+'</option>';
@@ -493,7 +493,8 @@ $(document).on('change', '.rad-delmet', function(){
 
 $(document).on('click', '#btn-buy', function(){
 		//myApp.alert(delivery_type);
-		let check_variant = 0;
+	let rad-delmet = $(".rad-opt-met").val();
+    let check_variant = 0;
 		let check_name ="";
 		if(hasvariant == 1){
              $('.sel-varient').each(function() {
@@ -516,7 +517,7 @@ $(document).on('click', '#btn-buy', function(){
                 if (delivery_type == "") {
                   myApp.alert('Select a Delivery Method');
               }
-            }else if ($("input[name='rad-delmet']").val() == 1) {
+            }else if (rad-delmet== 1) {
                   if ($('.drppickup').val() == "") {
                       myApp.alert('Select a pickup location');
 
