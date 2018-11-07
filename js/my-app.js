@@ -516,7 +516,7 @@ $(document).on('click', '#btn-buy', function(){
                 if (delivery_type == "") {
                   myApp.alert('Select a Delivery Method');
               }
-            }else if ($("input[name='rad-delmet']").val == 1) {
+            }else if ($("input[name='rad-delmet']").val() == 1) {
                   if ($('.drppickup').val() == "") {
                       myApp.alert('Select a pickup location');
 
