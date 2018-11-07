@@ -512,35 +512,23 @@ $(document).on('click', '#btn-buy', function(){
          if(check_variant == 0) {
              if ($('#itm-quant').val() == "") {
                  myApp.alert('Enter Quantity');
-             } else if ($('#itm-quant').val() == 0) {
+                 return false;
+             } else if ($('#itm-quant').val() < 1) {
                  myApp.alert('Enter Quantity minimum of 1');
+                 return false;
               }
-               else if(mdt == 3){
-                if (delivery_type == "") {
+               else if(mdt == 3 && delivery_type == ""){
                   myApp.alert('Select a Delivery Method');
-              }
-            }else if (delivery_type== 1) {
-                  if ($('.drppickup').val() == "") {
+                 return false;
+            }else if (delivery_type== 1 && $('.drppickup').val() == "") {
                       myApp.alert('Select a pickup location');
-
-                  }
+                 return false;
               }
              else {
-                 //branch_name = $('.drppickup option:selected').attr('data-branchname');
-               //  branch_name = $('option:selected', this).attr();
-				// branch_id = $('.drppickup option:selected').val();
-				// branch_id = $('.drppickup').val();
-
-                 //myApp.alert(branch_name);
 
 
                  prod_quant = $('#itm-quant').val();
-                 //myApp.alert(delivery_type);
-                 //alert('reached here');
                  mainView.router.loadPage('summary.html');
-                 //myApp.router.loadPage('shopping-cart.html');
-                 //	mainView.router.navigate('shopping-cart.html');
-                 //myApp.router.navigate('shopping-cart.html');
              }
          } else {
 
