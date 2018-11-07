@@ -493,7 +493,8 @@ $(document).on('change', '.rad-delmet', function(){
 
 $(document).on('click', '#btn-buy', function(){
 		//myApp.alert(delivery_type);
-	let rad-delmet = $(".rad-opt-met").val();
+	let delmet = $(".rad-opt-met").val();
+	alert(delmet);
     let check_variant = 0;
 		let check_name ="";
 		if(hasvariant == 1){
@@ -517,7 +518,7 @@ $(document).on('click', '#btn-buy', function(){
                 if (delivery_type == "") {
                   myApp.alert('Select a Delivery Method');
               }
-            }else if (rad-delmet== 1) {
+            }else if (delmet== 1) {
                   if ($('.drppickup').val() == "") {
                       myApp.alert('Select a pickup location');
 
