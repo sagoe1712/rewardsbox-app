@@ -588,7 +588,7 @@ myApp.onPageInit('shopping-cart', function (page) {
     result += '<h2 class="summary-prd-name">'+product_name+'</h2>';
     result += '<h2 class="summary-unit-price yellow-text">'+unitprice+'</h2>';
     result += 'Qty <input type="number" id="summ-upd-qty" class="summ-qty" min="1" value="'+prod_quant+'" max="'+max_quant+'"> <a href="#" class="btn-summ-update" style="display: none;">Update</a>';
-    result += '<p>'+delivery_name+'</p>';
+    result += '<p class="summ-delivery-type">'+delivery_name+'</p>';
     if(delivery_type==1) {
         result += '<p>'+branch_name+'</p>';
     }
@@ -602,6 +602,15 @@ myApp.onPageInit('shopping-cart', function (page) {
                         totalshipitm();
 
 
+});
+
+$(document).on('blur', '#summ-upd-qty', function () {
+	var check = $('#summ-upd-qty').val();
+	if(check < 1){
+		myApp.alert("Cannot enter quantity less than 1");
+		$('#summ-upd-qty').val('1');
+        $('#summ-upd-qty').focus();
+	}
 });
 
 $(document).on('click', '.btn-summ-update', function () {

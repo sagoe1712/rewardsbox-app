@@ -573,7 +573,9 @@ h2.product-name {
   line-height: 50px;
   text-align: center;
   width: 50px;
+  background: darkblue;
 }
+
 .footer-icon a:nth-child(2) i{background:#3B5998;}
 .footer-icon a:nth-child(3) i{background:#4099FF;}
 .footer-icon a:nth-child(4) i{background:#2ABB67;}
@@ -1531,4 +1533,14 @@ div [data-page="shopping-cart"] u{
 .myprofile table tr td{
     border-bottom: 1px solid #ccc !important;
     padding: 20px 0px !important;
+}
+
+.summ-delivery-type{
+  margin-top: 10px !important;
+  font-weight: bolder !important;
+  color: #3D1A57 !important;
+}
+
+.carttotal p{
+  font-weight: bolder !important;
 }
