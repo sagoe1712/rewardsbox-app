@@ -35,7 +35,14 @@
 /*----------------------------------------*/
 /*  1.  Theme default CSS
 /*----------------------------------------*/
-html, body {height: 100%;}
+html, body {
+  height: 100%;
+font-size: 12px !important;
+  letter-spacing: 1px !important;
+}
+a{
+  font-size: 12px !important;
+}
 .floatleft {float:left}
 .floatright {float:right}
 .alignleft {float:left;margin-right:15px;margin-bottom: 15px}
@@ -139,6 +146,7 @@ input[type=text]:focus,input[type=email]:focus,input[type=number]:focus,input[ty
   width: 100%;
 }
 .list-menu .item-title {
+  font-size: 12px;
   flex-shrink: 1;
   max-width: 100%;
   overflow: hidden;
@@ -1227,6 +1235,7 @@ table tr th.width-4 {
 select.inputtype{
 	height: 50px !important;
   padding: 10px;
+  border-radius:5px !important;
 }
 .mybutton {
   background: #ec4445 none repeat scroll 0 0;
@@ -1421,7 +1430,7 @@ tfoot{border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
     margin: 100px auto !important;
 }
 .list-categories{
-	margin-top: 20px !important;
+	margin-top: 0px !important;
 }
 .list-categories, .list-categories tr, .list-categories tr td{
 	border: none !important;
@@ -1554,8 +1563,12 @@ div [data-page="shopping-cart"] u{
 }
 
 .myprofile table tr td{
-    border-bottom: 1px solid #ccc !important;
-    padding: 20px 0px !important;
+    border-bottom: 1px solid #eee !important;
+    padding: 40px 0px !important;
+}
+
+.myprofile table tr td h4{
+  font-size: 14px !important;
 }
 
 .summ-delivery-type{
@@ -1599,6 +1612,7 @@ div [data-page="shopping-cart"] u{
 
 .discover-u{
   text-decoration-color: #FCB017 !important;
+  text-decoration: none !important;
 }
 
 
@@ -1610,6 +1624,7 @@ div [data-page="shopping-cart"] u{
 .side-menu-hr{
   position: absolute !important;
   width: 100% !important;
+  opacity: 0.1 !important;
   left: 0px !important;
 }
 
