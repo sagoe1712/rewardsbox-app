@@ -25,7 +25,7 @@ var tprice;
 var totalshipping;
 var token = '1000';
 var hasvariant;
-var member_no =2111;
+var member_no = 2111;
 var voucher_code;
 var order_no;
 var mdt;
@@ -40,57 +40,68 @@ var exp_child_price;
 var exp_location_id;
 var exp_location_name;
 var exp_day_slot = [];
+var cat_list;
+var counta;
+var countb;
+var cat_level_0;
+var cat_level_1;
+var exp_total_adult = 0;
+var exp_total_kid = 0;
+var exp_total_price = 0;
+var exp_adult_quant;
+var exp_kid_quant;
+var exp_date, exp_start_time;
+var exp_address_id;
 
 var myApp = new Framework7();
 
-function totalprice(){
-	 tprice = parseFloat(prdprice) * parseFloat(prod_quant);
-	$('#col-tot-price').html('N '+tprice);
-	$('#cost-price').html('N '+tprice);
+function totalprice() {
+    tprice = parseFloat(prdprice) * parseFloat(prod_quant);
+    $('#col-tot-price').html('N ' + tprice);
+    $('#cost-price').html('N ' + tprice);
 }
 
 
-function totalshipitm(){
-	 totalshipping = parseFloat(tprice) + parseFloat(delivery_price);
-	$('#grand-total').html('N '+totalshipping);
-	$('#grand-total').html('N '+totalshipping);
+function totalshipitm() {
+    totalshipping = parseFloat(tprice) + parseFloat(delivery_price);
+    $('#grand-total').html('N ' + totalshipping);
+    $('#grand-total').html('N ' + totalshipping);
 }
 
-function calccombo(){
-        let self = this;
-        $.each(productdetails[0].data.combinations, function (index, value) {
+function calccombo() {
+    let self = this;
+    $.each(productdetails[0].data.combinations, function (index, value) {
 
-            let comboi = custvar.length;
-            let trackmain = 0;
+        let comboi = custvar.length;
+        let trackmain = 0;
 
-            $.each(custvar, function (i, val) {
-                let track;
-                let tracki = 0;
+        $.each(custvar, function (i, val) {
+            let track;
+            let tracki = 0;
 
-                track = (value.comb[i].includes(val));
+            track = (value.comb[i].includes(val));
 
-                if(track){
+            if (track) {
 
-                    trackmain += 1;
+                trackmain += 1;
 
-                }
-                else
-                {
+            }
+            else {
 
-                }
-
-            })
-            if (trackmain == comboi){
-              //  console.log(value.price)
-				$('.product-price').html(value.price);
-				prdprice = value.price;
-                // self.editproductdetailsprice(value.price)
-
-                trackmain = 0;
-                return false;
             }
 
         })
+        if (trackmain == comboi) {
+            //  console.log(value.price)
+            $('.product-price').html(value.price);
+            prdprice = value.price;
+            // self.editproductdetailsprice(value.price)
+
+            trackmain = 0;
+            return false;
+        }
+
+    })
 }
 
 
@@ -103,19 +114,15 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true
 });
 
- var mySwiper = myApp.swiper('.swiper-container', {
-    pagination:'.swiper-pagination',
+var mySwiper = myApp.swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
     paginationClickable: true,
     autoplay: 2500,
     autoplayDisableOnInteraction: false
-  });
+});
 
- var mySwiper = myApp.swiper('.swiper-container2', {
-
-  });
- var mySwiper = myApp.swiper('.swiper-container3', {
-
-  });
+var mySwiper = myApp.swiper('.swiper-container2', {});
+var mySwiper = myApp.swiper('.swiper-container3', {});
 
 // Callbacks to run specific code for specific pages, for example for About page:
 myApp.onPageInit('about', function (page) {
@@ -126,138 +133,224 @@ myApp.onPageInit('about', function (page) {
 });
 
 (function ($) {
- "use strict";
+    "use strict";
 
-$(document).ready(function(){
-    /*------------------------
-    menu toggle
-    --------------------------*/
+    $(document).ready(function () {
+        /*------------------------
+        menu toggle
+        --------------------------*/
 
-    $(".js-toggle-menu").on('click', function(){
-        $(".show-menu").slideToggle();
+        $(".js-toggle-menu").on('click', function () {
+            $(".show-menu").slideToggle();
+        });
+
+        $(".js-toggle-menu2").on('click', function () {
+            $(".show-menu2").slideToggle();
+        });
+
+        $('.swipebox').swipebox();
+
+        $(".clickopen").on('click', function () {
+            $(".popover-links").slideToggle();
+        });
+
+
     });
-
-    $(".js-toggle-menu2").on('click', function(){
-        $(".show-menu2").slideToggle();
-    });
-
-    $( '.swipebox' ).swipebox();
-
-  $(".clickopen").on('click', function(){
-        $(".popover-links").slideToggle();
-    });
-
-
-});
-
 
 
 })(jQuery);
 
 
-$(document).on('click','#btn-login', function(){
-		var username = $('#txtUsername').val();
-var password = $('#pwdPass').val();
+$(document).on('click', '#btn-login', function () {
+    var username = $('#txtUsername').val();
+    var password = $('#pwdPass').val();
 //	myApp.alert(username +" "+ password);
-	if(username == "olayinka"){
-		if(password =="password"){
-			window.location.replace('inner.html');
-			return false;
-		}else{
-		myApp.alert("Invalid Credentials");
-			return false;
-	}
-
-	}else{
-		myApp.alert("Invalid Credentials");
-		return false;
-	}
-
-});
-
-$(document).on('click','#logout', function(){
-		window.location.replace('index.html');
-	return false;
-
-
-});
-
-
-	myApp.onPageInit('catalogue', function (page) {
-	//myApp.alert("catalogue page loaded");
-        var colors = ["#FCB017", "#3D1A57", "#f00", "#99cc00", "#f60"];
-        var i = 0;
-$.ajax({
-    type:"GET",
-	//url:"getcategories.php",
-    url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=catalogue",
-    headers:{"token":token},
-    dataType:"json",
-    success: function(msg){
-
-        if (msg.status ==1){
-            $.each(msg.data, function(key,value)
-            {
-
-                $('.list-categories').append("<tr><td width='10%'><i class='fa fa-star' style='color: "+colors[i]+" !important;'></i></td><td width='80%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='cat-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right' style='color: #FCB017 !important;'></i></a></td></tr>");
-                i++;
-            })
+    if (username == "olayinka") {
+        if (password == "password") {
+            window.location.replace('inner.html');
+            return false;
+        } else {
+            myApp.alert("Invalid Credentials");
+            return false;
         }
-        else{
-            alert(msg);
-        }
+
+    } else {
+        myApp.alert("Invalid Credentials");
+        return false;
     }
-});
 
 });
 
+$(document).on('click', '#logout', function () {
+    window.location.replace('index.html');
+    return false;
 
 
-$(document).on('click', 'a.cat-link', function(){
-
-
-	 category_id = null;
-	category_name = $(this).attr('data-catname');
-	category_id = $(this).attr('data-catid');
-	mainView.router.loadPage('shop-list.html');
-});
-
-$(document).on('click','a.exp-list-link',function(){
-	category_id = null;
- category_name = $(this).attr('data-catname');
- category_id = $(this).attr('data-catid');
- mainView.router.loadPage('exp-list.html');
 });
 
 
+myApp.onPageInit('catalogue', function (page) {
+    //myApp.alert("catalogue page loaded");
+    let list_table = "";
+    var d = 0;
+
+    $.ajax({
+        type: "GET",
+        //url: "getcategories-array.php",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=catalogue",
+        headers: {"token": token},
+        dataType: "json",
+        success: function (msg) {
+
+            if (msg.status == 1) {
+                cat_list = msg.data;
+                console.log(cat_list);
+                $.each(msg.data, function (key, value) {
+                    list_table += "<tr>";
+                    list_table += "<td width='90%'>";
+                    list_table += "<a class='cat-link' href='#' data-count='" + d + "' data-catname='" + value.name + "'><b>" + value.name + "</b></a>";
+                    list_table += "</td>";
+                    list_table += "<td width='10%'>";
+                    list_table += "<a class='cat-link' href='#' data-count='" + d + "' data-catname='" + value.name + "'><i class='fa fa-chevron-right'></i></a>";
+                    list_table += "</td>";
+                    list_table += "</tr>";
+
+                    d++;
+
+                })
+                cat_level_0 = list_table;
+                $('.list-categories').html(list_table);
+            }
+            else {
+                alert(msg);
+            }
+        }
+    });
+
+});
 
 
+$(document).on('click', 'a.cat-link', function () {
 
-	myApp.onPageInit('shop-list', function (page) {
+    category_id = null;
+    category_name = $(this).attr('data-catname');
+    counta = $(this).attr('data-count');
+    var e = 0;
+    var menu = cat_list[counta].child_menu;
 
-	$('#category-name').html(category_name);
+    let list_table1 = "";
 
-	var prd_itm ="";
+    list_table1 += "<tr class='row-back'>";
+    list_table1 += "<td colspan='2'>";
+    list_table1 += "<a href='#' class='back-link'><i class='fa fa-chevron-left color-white'></i> <span class='color-white'>Back</span></a>";
+    list_table1 += "</td>";
+    list_table1 += "</tr>";
 
-	$.ajax({
-    			type:"POST",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
-		//url:"getproduct.php",
-		headers:{"token":token},
-			data:{category_id: category_id},
-    			dataType:"json",
-    			success: function(msg){
 
-					if (msg.status ==1){
-						 $.each(msg.data, function(key,value)
-                            {
-		 prd_itm += '<div class="single-shop-list">';
-		 prd_itm += '<div class="shop-inner">';
-		 prd_itm += '<div class="shop-img">';
-		 prd_itm += '<img src="'+value.image+'" alt=""/>';
-		 prd_itm += '</div>';
-		 prd_itm += '<div class="shop-content">';
-		 prd_itm += '<h3>'+value.product+'</h3>';
+    $.each(menu, function (key, value) {
+        list_table1 += "<tr>";
+        list_table1 += "<td width='90%'>";
+        list_table1 += "<a class='cat-link1' href='#'  data-count='" + e + "' data-catname='" + value.name + "'><b>" + value.name + "</b></a>";
+        list_table1 += "</td>";
+        list_table1 += "<td width='10%'>";
+        list_table1 += "<a class='cat-link1' data-count='" + e + "' href='#' data-catname='" + value.name + "'><i class='fa fa-chevron-right'></i></a>";
+        list_table1 += "</td>";
+        list_table1 += "</tr>";
+        e++;
+
+    })
+    cat_level_1 = list_table1;
+    $('.list-categories').html(list_table1);
+
+
+});
+
+$(document).on('click', 'a.cat-link1', function () {
+
+    category_id = null;
+    category_name = $(this).attr('data-catname');
+    countb = $(this).attr('data-count');
+    var menu1 = cat_list[counta].child_menu[countb].category;
+
+    let list_table2 = "";
+
+    list_table2 += "<tr class='row-back'>";
+    list_table2 += "<td colspan='2'>";
+    list_table2 += "<a href='#' class='back-link1'><i class='fa fa-chevron-left color-white'></i> <span class='color-white'>Back</span></a>";
+    list_table2 += "</td>";
+    list_table2 += "</tr>";
+
+
+    $.each(menu1, function (key, value) {
+        list_table2 += "<tr>";
+        list_table2 += "<td width='90%'>";
+        list_table2 += "<a class='cat-link2' href='#' data-catname='" + value.name + "' data-catid='" + value.id + "'><b>" + value.name + "</b></a>";
+        list_table2 += "</td>";
+        list_table2 += "<td width='10%'>";
+        list_table2 += "<a class='cat-link2' href='#' data-catname='" + value.name + "' data-catid='" + value.id + "'><i class='fa fa-chevron-right'></i></a>";
+        list_table2 += "</td>";
+        list_table2 += "</tr>";
+
+    })
+    $('.list-categories').html(list_table2);
+
+
+});
+
+$(document).on('click', 'a.back-link', function () {
+
+    $('.list-categories').html(cat_level_0);
+
+});
+
+$(document).on('click', 'a.back-link1', function () {
+
+    $('.list-categories').html(cat_level_1);
+
+});
+
+
+$(document).on('click', 'a.cat-link2', function () {
+
+
+    category_id = null;
+    category_name = $(this).attr('data-catname');
+    category_id = $(this).attr('data-catid');
+    mainView.router.loadPage('shop-list.html');
+});
+
+$(document).on('click', 'a.exp-list-link', function () {
+    category_id = null;
+    category_name = $(this).attr('data-catname');
+    category_id = $(this).attr('data-catid');
+    mainView.router.loadPage('exp-list.html');
+});
+
+
+myApp.onPageInit('shop-list', function (page) {
+
+    $('#category-name').html(category_name);
+
+    var prd_itm = "";
+
+    $.ajax({
+        type: "POST",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
+        //url: "getproduct.php",
+        headers: {"token": token},
+        data: {category_id: category_id},
+        dataType: "json",
+        success: function (msg) {
+
+            if (msg.status == 1) {
+                $.each(msg.data, function (key, value) {
+                    prd_itm += '<div class="single-shop-list">';
+                    prd_itm += '<div class="shop-inner">';
+                    prd_itm += '<div class="shop-img">';
+                    prd_itm += '<img src="' + value.image + '" alt=""/>';
+                    prd_itm += '</div>';
+                    prd_itm += '<div class="shop-content">';
+                    prd_itm += '<h3>' + value.product + '</h3>';
 //		 prd_itm += '<div class="pro-rating-s">';
 //		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
 //		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
@@ -265,39 +358,38 @@ $(document).on('click','a.exp-list-link',function(){
 //		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
 //		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
 //		 prd_itm += '</div>';
-		 prd_itm += '<div class="price-box">';
-		 prd_itm += '<span class="new-price">N'+value.price+'</span>';
-		 prd_itm += '</div>';
-		 prd_itm += '<a href="#" class="button btn-details cat-product-link" data-product_code="'+value.product_code+'">Details</a>'
-		 prd_itm += '</div>';
-		 prd_itm += '</div>';
-		 prd_itm += '</div>';
-					})
-						$('.shop-area').html(prd_itm);
-								}
-					else if(msg.status ==0){
-						$('.shop-area').append('<h3>There is no item in this category</h3>');
-					}
-					else{
-						alert("Status Code: "+msg.status+"\n"+msg.message);
-					}
+                    prd_itm += '<div class="price-box">';
+                    prd_itm += '<span class="new-price"><span class="color-black">N</span> ' + value.price + '</span>';
+                    prd_itm += '</div>';
+                    prd_itm += '<a href="#" class="button btn-details cat-product-link" data-product_code="' + value.product_code + '">View Product</a>'
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                })
+                $('.shop-area').html(prd_itm);
+            }
+            else if (msg.status == 0) {
+                $('.shop-area').append('<h3>There is no item in this category</h3>');
+            }
+            else {
+                alert("Status Code: " + msg.status + "\n" + msg.message);
+            }
 
-				}
-		});
-
-});
-
-$(document).on('click', 'a.cat-product-link', function(){
-
-	product_code = null;
-	product_code = $(this).attr('data-product_code');
-	mainView.router.loadPage('single-product.html');
+        }
+    });
 
 });
 
+$(document).on('click', 'a.cat-product-link', function () {
+
+    product_code = null;
+    product_code = $(this).attr('data-product_code');
+    mainView.router.loadPage('single-product.html');
+
+});
 
 
-$(document).on('click', 'a.exp-product-link', function(){
+$(document).on('click', 'a.exp-product-link', function () {
 
     product_code = null;
     product_code = $(this).attr('data-product_code');
@@ -306,46 +398,46 @@ $(document).on('click', 'a.exp-product-link', function(){
 });
 
 
-	myApp.onPageInit('single-product', function (page) {
-	//alert(product_code);
-	//alert(category_id);
+myApp.onPageInit('single-product', function (page) {
+    //alert(product_code);
+    //alert(category_id);
 
-	$.ajax({
-    			type:"POST",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=product_details&product_code="+product_code,
-        //url:"getproduct_details.php",
+    $.ajax({
+        type: "POST",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=product_details&product_code="+product_code,
+        //url: "getproduct_details.php?product_code="+product_code,
 
-        headers:{"token":token},
-      data:{category_id: category_id},
-    			dataType:"json",
-    			success: function(msg){
+        headers: {"token": token},
+        data: {category_id: category_id},
+        dataType: "json",
+        success: function (msg) {
 
-    			//	console.log(msg);
+            //	console.log(msg);
 
-                    productdetails.push(msg);
+            productdetails.push(msg);
 
-					if (msg.status ==1 ){
+            if (msg.status == 1) {
 
-						prdprice = msg.data.price;
-						unitprice = msg.data.price;
-						max_quant = msg.data.max_quantity;
-						img_url = msg.data.image[0].image_url;
-						product_name = msg.data.product_name;
-                        hasvariant = msg.data.is_variant;
-						//delivery_type = msg.data.delivery_type;
+                prdprice = msg.data.price;
+                unitprice = msg.data.price;
+                max_quant = msg.data.max_quantity;
+                img_url = msg.data.image[0].image_url;
+                product_name = msg.data.product_name;
+                hasvariant = msg.data.is_variant;
+                //delivery_type = msg.data.delivery_type;
 
 
-						let result = "";
+                let result = "";
 
-						result += '<div class="single-product">';
-						result += '<div class="single-product-img">';
-						result += '<a href="#"><img src="'+msg.data.image[0].image_url+'" alt="" /></a>';
-						result += '</div>';
-						result += '<div class="single-product-content">';
-						result += '<h1 class="product_title">'+msg.data.product_name+'</h1>';
-						result += '<div class="price-box">';
-						result += '<span class="new-price product-price">N '+msg.data.price+'</span>';
-						result += '</div>';
+                result += '<div class="single-product">';
+                result += '<div class="single-product-img">';
+                result += '<a href="#"><img src="' + msg.data.image[0].image_url + '" alt="" /></a>';
+                result += '</div>';
+                result += '<div class="single-product-content">';
+                result += '<h1 class="product_title">' + msg.data.product_name + '</h1>';
+                result += '<div class="price-box">';
+                result += '<span class="new-price product-price"><span class="color-black">N</span> ' + msg.data.price + '</span>';
+                result += '</div>';
 //						result += '<div class="pro-rating">';
 //						result += '<a href="#"><i class="fa fa-star"></i></a>';
 //						result += '<a href="#"><i class="fa fa-star"></i></a>';
@@ -353,541 +445,553 @@ $(document).on('click', 'a.exp-product-link', function(){
 //						result += '<a href="#"><i class="fa fa-star"></i></a>';
 //						result += '<a href="#"><i class="fa fa-star"></i></a>';
 //						result += '</div>';
-						result += '<div class="short-description">';
-						result += '<p>'+msg.data.description+'</p>';
-						result += '</div>';
-						result += '<form action="#">';
+                result += '<div class="short-description">';
+                result += '<p>' + msg.data.description + '</p>';
+                result += '</div>';
+                result += '<form action="#">';
 
-						let result2 = "";
-						if (msg.data.delivery_type == 1){
-               delivery_type = 1;
-							result2+='<p class=""><input type="radio" class="rad-delmet" value="1" checked="checked"/>';
-							result2+='Pickup';
-							result2 +='</p><p><select class="constant-pickup drppickup">';
-							result2 +='<option>Pickup Location</option>';
+                let result2 = "";
+                if (msg.data.delivery_type == 1) {
+                    delivery_type = 1;
+                    result2 += '<p class=""><input type="radio" class="rad-delmet" value="1" checked="checked"/>';
+                    result2 += 'Pickup';
+                    result2 += '</p><p><select class="constant-pickup drppickup">';
+                    result2 += '<option>Pickup Location</option>';
 
-                            $.each(msg.data.branch_details, function(key,value)
-                            {
-                                result2 +=('<option value="'+value.branch_id+'">'+value.branch_name+'</option>');
-                            });
-                            result2 +='</select></p>';
-                           // $('.div-cat-itm-info').html(result2);
-                           	 delivery_type = 1;
-                        }
-
+                    $.each(msg.data.branch_details, function (key, value) {
+                        result2 += ('<option value="' + value.branch_id + '">' + value.branch_name + '</option>');
+                    });
+                    result2 += '</select></p>';
+                    // $('.div-cat-itm-info').html(result2);
+                    delivery_type = 1;
+                }
 
 
-							else if (msg.data.delivery_type == 2){
-                 delivery_type = 2;
+                else if (msg.data.delivery_type == 2) {
+                    delivery_type = 2;
 
-								result2 +='<div><input type="radio" class="rad-delmet" value="2" checked="checked"/> Delivery</div>';
+                    result2 += '<div><input type="radio" class="rad-delmet" value="2" checked="checked"/> Delivery</div>';
 
-							}
-						else if(msg.data.delivery_type == 3){
-              mdt = 3;
-                            delivery_type="";
-								result2 +='<p><input type="radio" class="rad-delmet rad-opt-met" value="2" name="rad-delmet" id="rad-del" /> Delivery <input type="radio" class="rad-delmet rad-opt-met" value="1" name="rad-delmet" id="rad-pickup" /> Pickup</p><p class="div-sel-pickup" style="display:none;"><select class="constant-pickup drppickup"><option value="">Pickup Location</option>';
-							 $.each(msg.data.branch_details, function(key,value1)
-                            {
-								 result2+='<option value="'+value1.branch_id+'"  data-branchname="'+value1.branch_name+'">'+value1.branch_name+'</option>';
-							 });
-							result2+='</select></p>';
-              	 delivery_type = 2;
-								}
+                }
+                else if (msg.data.delivery_type == 3) {
+                    mdt = 3;
+                    delivery_type = "";
+                    result2 += '<p><input type="radio" class="rad-delmet rad-opt-met" value="2" name="rad-delmet" id="rad-del" /> Delivery <input type="radio" class="rad-delmet rad-opt-met" value="1" name="rad-delmet" id="rad-pickup" /> Pickup</p><p class="div-sel-pickup" style="display:none;"><select class="constant-pickup drppickup"><option value="">Pickup Location</option>';
+                    $.each(msg.data.branch_details, function (key, value1) {
+                        result2 += '<option value="' + value1.branch_id + '"  data-branchname="' + value1.branch_name + '">' + value1.branch_name + '</option>';
+                    });
+                    result2 += '</select></p>';
+                    delivery_type = 2;
+                }
 
-							if (msg.data.is_variant == 1){//It is a boolean to show product has some attributes 1 is true and 0 is false
+                if (msg.data.is_variant == 1) {//It is a boolean to show product has some attributes 1 is true and 0 is false
 
-                            result2+='<div class="varient-div">';
+                    result2 += '<div class="varient-div">';
 
-							$.each(msg.data.attributes, function(key2,attributes)
-                            {
-									result2+='<p><select data-name ="'+attributes.name+'" class="sel-varient constant-pickup" id="'+attributes.id+'"><option value="">Select '+attributes.name+'</option>';
-								$.each(attributes.details, function(key3,details)
-                            	{
-									result2+='<option value="'+details.variant_id+'">'+details.variant_name+'</option>';
-								});
-								result2 +='</select></p>';
-							});
+                    $.each(msg.data.attributes, function (key2, attributes) {
+                        result2 += '<p><select data-name ="' + attributes.name + '" class="sel-varient constant-pickup" id="' + attributes.id + '"><option value="">Select ' + attributes.name + '</option>';
+                        $.each(attributes.details, function (key3, details) {
+                            result2 += '<option value="' + details.variant_id + '">' + details.variant_name + '</option>';
+                        });
+                        result2 += '</select></p>';
+                    });
 
-                            result2 +='</div>';
+                    result2 += '</div>';
 
-                            $.each(msg.data.combinations, function(key,comb)
-                                            {
-                              mixes.push([comb]);
-                            });
+                    $.each(msg.data.combinations, function (key, comb) {
+                        mixes.push([comb]);
+                    });
 
-						}
+                }
 
-						result += result2;
+                result += result2;
 
-						result += '<div class="quantity">';
-						result += '<input type="number" id="itm-quant" value="1" min="1" max="'+msg.data.max_quantity+'" placeholder="Quantity">';
-						result += '<a href="#" id="btn-buy">Buy Now</a>';
-						result += '</div>';
-						result += '</form>';
-						result += '</div>';
-						result += '</div>';
+                result += '<div class="quantity">';
+                result += '<input type="number" id="itm-quant" value="1" min="1" max="' + msg.data.max_quantity + '" placeholder="Quantity">';
+                result += '<a href="#" id="btn-buy">Buy Now</a>';
+                result += '</div>';
+                result += '</form>';
+                result += '</div>';
+                result += '</div>';
 
 
+                prod_signature = msg.data.signature;
 
+                $('.single-product-area').html(result)
+            }
+            else {
+                $('.single-product-area').html("Status Code: " + msg.status + "\n" + msg.message);
+            }
 
-					 prod_signature = msg.data.signature;
-
-                        $('.single-product-area').html(result)
-								}
-					else{
-						 $('.single-product-area').html("Status Code: "+msg.status+"\n"+msg.message);
-					}
-
-				}
-		});
+        }
+    });
 });
 
 
-$(document).on('change', '.sel-varient', function(){
+$(document).on('change', '.sel-varient', function () {
 
-custvar=[];
+    custvar = [];
 //	//myApp.alert(mixes);
-	let self = this;
-	$.each($('.varient-div select'),function(index, value){
-		             // console.log($(value).find('option:selected').val())
-                    // return false
-		//console.log($(value));
-                    if($(value).find('option:selected').val() == '') {
-                        //myApp.alert('Please complete the form');
-                        return false;
-                    }else{
-					//console.log('Else area')
-                        custvar.push($(value).find('option:selected').val());
+    let self = this;
+    $.each($('.varient-div select'), function (index, value) {
+        // console.log($(value).find('option:selected').val())
+        // return false
+        //console.log($(value));
+        if ($(value).find('option:selected').val() == '') {
+            //myApp.alert('Please complete the form');
+            return false;
+        } else {
+            //console.log('Else area')
+            custvar.push($(value).find('option:selected').val());
 
-						//console.log("the array has ",custvar);
+            //console.log("the array has ",custvar);
 
-                        //self.canaddtocart = true;
-                        // console.log(self.$store.state.combo)
-                       calccombo();
-
-
+            //self.canaddtocart = true;
+            // console.log(self.$store.state.combo)
+            calccombo();
 
 
-
-	}
-
-});
-
-
-
-});
-
-$(document).on('change', '.rad-delmet', function(){
-	 if ($("#rad-pickup").is(":checked")) {
-            $('.div-sel-pickup').show();
-		 delivery_type = 1;
         }
-        else if ($("#rad-del").is(":checked")) {
-            $('.div-sel-pickup').hide();
-         delivery_type = 2;
-        }
-        else {
-            $('.div-sel-pickup').hide();
-}
+
     });
 
-$(document).on('click', '#btn-buy', function(){
-		//myApp.alert(delivery_type);
-	// let delmet = $(".rad-opt-met").val();
-	// alert(delmet);
+
+});
+
+$(document).on('change', '.rad-delmet', function () {
+    if ($("#rad-pickup").is(":checked")) {
+        $('.div-sel-pickup').show();
+        delivery_type = 1;
+    }
+    else if ($("#rad-del").is(":checked")) {
+        $('.div-sel-pickup').hide();
+        delivery_type = 2;
+    }
+    else {
+        $('.div-sel-pickup').hide();
+    }
+});
+
+$(document).on('click', '#btn-buy', function () {
+    //myApp.alert(delivery_type);
+    // let delmet = $(".rad-opt-met").val();
+    // alert(delmet);
     let check_variant = 0;
-		let check_name ="";
-		if(hasvariant == 1){
-             $('.sel-varient').each(function() {
-                 if ($(this).val()=="") {
-                 	check_variant = 1;
-                 	check_name = $(this).attr('data-name');
-                 	//alert(check_name);
-                 }
-             });
-         }
+    let check_name = "";
+    if (hasvariant == 1) {
+        $('.sel-varient').each(function () {
+            if ($(this).val() == "") {
+                check_variant = 1;
+                check_name = $(this).attr('data-name');
+                //alert(check_name);
+            }
+        });
+    }
 
 
-         if(check_variant == 0) {
-             if ($('#itm-quant').val() == "") {
-                 myApp.alert('Enter Quantity');
-                 return false;
-             } else if ($('#itm-quant').val() < 1) {
-                 myApp.alert('Enter Quantity minimum of 1');
-                 return false;
-              }
-               else if(mdt == 3 && delivery_type == ""){
-                  myApp.alert('Select a Delivery Method');
-                 return false;
-            }else if (delivery_type== 1 && $('.drppickup').val() == "") {
-                      myApp.alert('Select a pickup location');
-                 return false;
-              }
-             else {
+    if (check_variant == 0) {
+        if ($('#itm-quant').val() == "") {
+            myApp.alert('Enter Quantity');
+            return false;
+        } else if ($('#itm-quant').val() < 1) {
+            myApp.alert('Enter Quantity minimum of 1');
+            return false;
+        }
+        else if (mdt == 3 && delivery_type == "") {
+            myApp.alert('Select a Delivery Method');
+            return false;
+        } else if (delivery_type == 1 && $('.drppickup').val() == "") {
+            myApp.alert('Select a pickup location');
+            return false;
+        }
+        else {
 
 
-                 prod_quant = $('#itm-quant').val();
-                 mainView.router.loadPage('summary.html');
-             }
-         } else {
+            prod_quant = $('#itm-quant').val();
+            mainView.router.loadPage('summary.html');
+        }
+    } else {
 
-             myApp.alert('Select Product '+check_name);
-             return false;
-		 }
+        myApp.alert('Select Product ' + check_name);
+        return false;
+    }
 });
 
 myApp.onPageInit('shopping-cart', function (page) {
-  // Following code will be executed for page with data-page attribute equal to "about"
- // myApp.alert('This is the auction description page');
+    // Following code will be executed for page with data-page attribute equal to "about"
+    // myApp.alert('This is the auction description page');
 
-	//var delivery_name;
-	//alert(delivery_name);
+    //var delivery_name;
+    //alert(delivery_name);
 
     let result;
     let result2;
 
-				if(delivery_type == 1){
-				delivery_name = "Pick Up:";
-					$('.table-cart-address').hide();
-					$('.p-delivery').hide();
+    if (delivery_type == 1) {
+        delivery_name = "Pick Up:";
+        $('.table-cart-address').hide();
+        $('.p-delivery').hide();
 
 
+    } else if (delivery_type == 2) {
+        delivery_name = "Delivery";
+        $('.table-cart-address').show();
+        $('.p-delivery').show();
 
+        $.ajax({
+            type: "GET",
+            url: "https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_state",
+            //url: "getstate.php",
+            headers: {token: token},
+            dataType: "json",
+            success: function (msg) {
+                //alert("na we dey here");
+                if (msg.status == 1) {
 
-				}else if (delivery_type == 2){
-					delivery_name = "Delivery";
-					$('.table-cart-address').show();
-					$('.p-delivery').show();
+                    $.each(msg.data, function (key, value) {
+                        $('#delivery-state').append('<option value="' + value.State_id + '">' + value.State_name + '</option>');
+                    });
 
-					$.ajax({
-    			type:"GET",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_state",
-        headers:{token:token},
-    			dataType:"json",
-    			success: function(msg){
-					//alert("na we dey here");
-					if (msg.status ==1 ){
-
-						$.each(msg.data, function(key,value)
-                            {
-							   $('#delivery-state').append('<option value="'+value.State_id+'">'+value.State_name+'</option>');
-							   });
-
-					}
-				}
-	});
-				}
+                }
+            }
+        });
+    }
 
 
     result = '<tr>';
     result += '<td classs="summary-td-img">';
-    result += '<div class="shop-img"><img src="'+img_url+'"></div>';
+    result += '<div class="shop-img"><img src="' + img_url + '"></div>';
     result += '</td>';
     result += '<td classs="summary-td-content">';
-    result += '<h2 class="summary-prd-name">'+product_name+'</h2>';
-    result += '<h2 class="summary-unit-price yellow-text">'+unitprice+'</h2>';
-    result += 'Qty <input type="number" id="summ-upd-qty" class="summ-qty" min="1" value="'+prod_quant+'" max="'+max_quant+'"> <a href="#" class="btn-summ-update" style="display: none;">Update</a>';
-    result += '<p class="summ-delivery-type">'+delivery_name+'</p>';
-    if(delivery_type==1) {
-        result += '<p>'+branch_name+'</p>';
+    result += '<h2 class="summary-prd-name">' + product_name + '</h2>';
+    result += '<h2 class="summary-unit-price">N ' + unitprice + '</h2>';
+    result += '<p class="summ-delivery-type">' + delivery_name + '</p>';
+    if (delivery_type == 1) {
+        result += '<p><b>Location: </b>' + branch_name + '</p>';
     }
+    result += '<input type="number" id="summ-upd-qty" class="summ-qty inputtype" min="1" value="' + prod_quant + '" max="' + max_quant + '"> <a href="#" class="btn-summ-update" style="display: none;">Update</a>';
+
     result += '</td>';
     result += '</tr>';
 
 
-
-                      $('.table-prd-item').html(result);
-						totalprice();
-                        totalshipitm();
+    $('.table-prd-item').html(result);
+    totalprice();
+    totalshipitm();
 
 
 });
 
 $(document).on('blur', '#summ-upd-qty', function () {
-	var check = $('#summ-upd-qty').val();
-	if(check < 1){
-		myApp.alert("Cannot enter quantity less than 1");
-		$('#summ-upd-qty').val('1');
+    var check = $('#summ-upd-qty').val();
+    if (check < 1) {
+        myApp.alert("Cannot enter quantity less than 1");
+        $('#summ-upd-qty').val('1');
         $('#summ-upd-qty').focus();
-	}
+    }
 });
 
 $(document).on('click', '.btn-summ-update', function () {
-	prod_quant = $('#summ-upd-qty').val();
-	totalprice();
+    prod_quant = $('#summ-upd-qty').val();
+    totalprice();
     totalshipitm();
     $('.btn-summ-update').hide();
 });
 
-$(document).on('change', '#summ-upd-qty', function() {
-	$('.btn-summ-update').show();
+$(document).on('change', '#summ-upd-qty', function () {
+    $('.btn-summ-update').show();
 });
 
-$(document).on('change', '#delivery-state', function(){
-	state_id = $('#delivery-state').val();
-	$.ajax({
-    			type:"GET",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_city&state_id="+state_id,
-        headers:{token:token},
-			data:{state_id:state_id},
-    			dataType:"json",
-    			success: function(msg){
-					if (msg.status ==1 ){
+$(document).on('change', '#delivery-state', function () {
+    state_id = $('#delivery-state').val();
+    $.ajax({
+        type: "GET",
+        //url:"getcity.php?state_id="+state_id,
+        url: "https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_city&state_id=" + state_id,
+        headers: {token: token},
+        data: {state_id: state_id},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == 1) {
 
-						 $('#delivery-city').html(' <option value="">Select Delivery City..</option>');
+                $('#delivery-city').html(' <option value="">Select Delivery City..</option>');
 
-						$.each(msg.data, function(key,value)
-                            {
-							   $('#delivery-city').append('<option value="'+value.City_id+'">'+value.City_name+'</option>');
-							   })
+                $.each(msg.data, function (key, value) {
+                    $('#delivery-city').append('<option value="' + value.City_id + '">' + value.City_name + '</option>');
+                })
 
-					}
-				}
-	});
-
-});
-
-$(document).on('change', '#delivery-city', function(){
-
-	city_id = $('#delivery-city').val();
-
-	//Using the single delivery item api
-	$.ajax({
-    			type:"POST",
-			url:"http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=item_delivery_price",
-      headers:{token:token},
-      data:{city_id:city_id, state_id:state_id,signature:prod_signature,quantity:prod_quant},
-    			dataType:"json",
-    			success: function(msg){
-					if (msg.status ==1 ){
-						delivery_price = msg.data.price;
-						$('#delivery-text').html(delivery_price);
-						totalshipitm();
-
-					}else{
-						myApp.alert("Problem with retrieving delivery price \n"+msg);
-					}
-				}
-	});
-
+            }
+        }
+    });
 
 });
 
+$(document).on('change', '#delivery-city', function () {
 
-$(document).on('click', '#btn-checkout', function(){
-	//myApp.alert("This button works");
-	var first_name = $('#txtfname').val();
-	var last_name = $('#txtlname').val();
-	var email = $('#txtemail').val();
-	var phone = $('#txtphone').val();
-	var ref_no = Math.floor(Math.random() * 10);
-	var address = $('#txtaddress').val();
-  city_id = $('#delivery-city').val();
-  state_id = $('#delivery-state').val();
+    city_id = $('#delivery-city').val();
 
-  var cust_det = [];
-  var cust_payload = {state_id: state_id, city_id: city_id, first_name: first_name, last_name: last_name, email: email, phone_no: phone, shipping_cost: totalshipping, address: address};
-  cust_det.push(cust_payload);
-  	contact = JSON.stringify(cust_payload);
+    //Using the single delivery item api
+    $.ajax({
+        type: "POST",
+        url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=item_delivery_price",
+        //url:"getdelivery.php",
+        headers: {token: token},
+        data: {city_id: city_id, state_id: state_id, signature: prod_signature, quantity: prod_quant},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == 1) {
+                delivery_price = msg.data.price;
+                $('#delivery-text').html(delivery_price);
+                totalshipitm();
 
-
-	if (first_name == ""){
-		myApp.alert("Enter First Name");
-	} else if (last_name == ""){
-		myApp.alert("Enter Last Name");
-	} else if (email == ""){
-		myApp.alert("Enter Email Address");
-	} else if (phone == ""){
-		myApp.alert("Enter Phone Number");
-	} else{
-		let payload = {branch_id: branch_id, ref_no:ref_no, quantity:prod_quant, price:tprice, delivery_type:delivery_type, varients:custvar, shipping_cost:totalshipping, member_no:member_no, signature:prod_signature, branch_id:branch_id, delivery_details:JSON.stringify(cust_payload)}
+            } else {
+                myApp.alert("Problem with retrieving delivery price \n" + msg.message);
+            }
+        }
+    });
 
 
-			$.ajax({
+});
 
-    		type:"POST",
-			url:"http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=item_purchase",
-        headers:{token:token},
-      data:payload,
-    			dataType:"json",
-    			success: function(msg){
-					if (msg.status == 1){
 
-	voucher_code = msg.voucher_code;
-                        order_no = msg.order_no;
-                        mainView.router.loadPage('success.html');
-                        delivery_type = "";
-					}else{
-						myApp.alert(msg.message);
-					}
-				}
-	});
+$(document).on('click', '#btn-checkout', function () {
+    //myApp.alert("This button works");
+    var first_name = $('#txtfname').val();
+    var last_name = $('#txtlname').val();
+    var email = $('#txtemail').val();
+    var phone = $('#txtphone').val();
+    var ref_no = Math.floor(Math.random() * 10);
+    var address = $('#txtaddress').val();
+    city_id = $('#delivery-city').val();
+    state_id = $('#delivery-state').val();
 
-	}
+    var cust_det = [];
+    var cust_payload = {
+        state_id: state_id,
+        city_id: city_id,
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        phone_no: phone,
+        shipping_cost: delivery_price,
+        address: address
+    };
+    cust_det.push(cust_payload);
+    contact = JSON.stringify(cust_payload);
+
+
+    if (first_name == "") {
+        myApp.alert("Enter First Name");
+    } else if (last_name == "") {
+        myApp.alert("Enter Last Name");
+    } else if (email == "") {
+        myApp.alert("Enter Email Address");
+    } else if (phone == "") {
+        myApp.alert("Enter Phone Number");
+    } else {
+        let payload = {
+            branch_id: branch_id,
+            ref_no: ref_no,
+            quantity: prod_quant,
+            price: tprice,
+            delivery_type: delivery_type,
+            varients: custvar,
+            shipping_cost: totalshipping,
+            member_no: member_no,
+            signature: prod_signature,
+            branch_id: branch_id,
+            delivery_details: JSON.stringify(cust_payload)
+        }
+
+
+        $.ajax({
+
+            type: "POST",
+            url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=item_purchase",
+            headers: {token: token},
+            data: payload,
+            dataType: "json",
+            success: function (msg) {
+                if (msg.status == 1) {
+
+                    voucher_code = msg.voucher_code;
+                    order_no = msg.order_no;
+                    mainView.router.loadPage('success.html');
+                    delivery_type = "";
+                } else {
+                    myApp.alert(msg.message);
+                }
+            }
+        });
+
+    }
 
 });
 
 myApp.onPageInit('success-page', function () {
-		$('#vouch').html(voucher_code);
-		$('#orderno').html(order_no);
+    $('#vouch').html(voucher_code);
+    $('#orderno').html(order_no);
 });
 
 
 myApp.onPageInit('experience', function () {
 
-	$.ajax({
-    			type:"GET",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_country",
-        headers:{token:token},
-    			dataType:"json",
-    			success: function(msg){
-					//alert("na we dey here");
-					if (msg.status ==1 ){
+    $.ajax({
+        type: "GET",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_country",
+        //url: "getexpcountries.php",
+        headers: {token: token},
+        dataType: "json",
+        success: function (msg) {
+            //alert("na we dey here");
+            if (msg.status == 1) {
 
-						$.each(msg.data, function(key,value)
-                            {
-							   $('#exp-country').append('<option value="'+value.country_id+'" data-country="'+value.country_name+'">'+value.country_name+'</option>');
-							   });
+                $.each(msg.data, function (key, value) {
+                    $('#exp-country').append('<option value="' + value.country_id + '" data-country="' + value.country_name + '">' + value.country_name + '</option>');
+                });
 
-					}
-				}
-	});
+            }
+        }
+    });
 });
 
-$(document).on('change', '.drppickup', function(){
-	 branch_name = $('option:selected', this).attr('data-branchname');
-				 branch_id = $('.drppickup').val();
+$(document).on('change', '.drppickup', function () {
+    branch_name = $('option:selected', this).attr('data-branchname');
+    branch_id = $('.drppickup').val();
 });
 
-$(document).on('change', '#exp-country', function(){
-	exp_country_id = $(this).val();
-	exp_country_name = $('option:selected', this).attr('data-name');
-	let cityresult = ""
-	//fetches the city in the country
+$(document).on('change', '#exp-country', function () {
+    exp_country_id = $(this).val();
+    exp_country_name = $('option:selected', this).attr('data-name');
+    let cityresult = ""
+    //fetches the city in the country
 
-	$.ajax({
-    			type:"GET",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_city&country_id="+exp_country_id,
-        headers:{token:token},
-    			dataType:"json",
-    			success: function(msg){
-					//alert("na we dey here");
-					if (msg.status ==1 ){
-                        cityresult ="<option value = ''>Select City</option>";
-						$.each(msg.data, function(key,value)
-                            {
-							  cityresult +='<option value="'+value.city_id+'" data-cityname="'+value.name+'">'+value.name+'</option>';
-							   });
-                        $('#exp-city').html(cityresult);
+    $.ajax({
+        type: "GET",
+        //url: "getexpcity.php?country_id=" + exp_country_id,
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_city&country_id="+exp_country_id,
+        headers: {token: token},
+        dataType: "json",
+        success: function (msg) {
+            //alert("na we dey here");
+            if (msg.status == 1) {
+                cityresult = "<option value='0'> Select City</option>";
+                $.each(msg.data, function (key, value) {
+                    cityresult += '<option value="' + value.city_id + '" data-cityname="' + value.name + '">' + value.name + '</option>';
+                });
+                $('#exp-city').html(cityresult);
 
-					}
-				}
-	});
-
-});
-
-$(document).on('change', '#exp-city', function(){
-	exp_city_id = $(this).val();
-	exp_city_name = $('option:selected', this).attr('data-cityname');
+            }
+        }
+    });
 
 });
 
+$(document).on('change', '#exp-city', function () {
+    exp_city_id = $(this).val();
+    exp_city_name = $('option:selected', this).attr('data-cityname');
+
+});
 
 
-$(document).on('click', '#btn-experience', function(){
-	//category_id = exp_cate_id;
-	category_name = exp_cate_name;
+$(document).on('click', '#btn-experience', function () {
+    //category_id = exp_cate_id;
+    category_name = exp_cate_name;
 
-	if(exp_country_id == ""){
-		myApp.alert("Kindly Select A Country");
-		return false;
-	}else if(exp_city_id == ""){
-		myApp.alert("Kindly Select A City")
+
+    if (exp_country_id == null || 0) {
+        myApp.alert("Kindly Select A Country");
         return false;
-	}else {
+    } else if (exp_city_id == null || 0) {
+        myApp.alert("Kindly Select A City")
+        return false;
+    } else {
         mainView.router.loadPage('experience2.html');
     }
 
 });
 
-	myApp.onPageInit('experience-list', function (page) {
-	//myApp.alert("catalogue page loaded");
-        var colors = ["#FCB017", "#3D1A57", "#f00", "#99cc00", "#f60"];
-        var i = 0;
+myApp.onPageInit('experience-list', function (page) {
+    //myApp.alert("catalogue page loaded");
+    let expcatlist;
 
-		let expcatlist = "";
 
-$.ajax({
-    type:"GET",
-    url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=experience",
-    headers:{"token":token},
-    dataType:"json",
-    success: function(msg){
+    $.ajax({
+        type: "GET",
+        //url: "getexpcategories.php",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=experience",
+        headers: {"token": token},
+        dataType: "json",
+        success: function (msg) {
 
-        if (msg.status ==1){
-            $.each(msg.data, function(key,value)
-            {
-            	expcatlist += "<tr><td width='10%'><i class='fa fa-star' style='color: "+colors[i]+" !important;'></i></td><td width='80%'><a class='exp-list-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'>"+value.category+"</a></td><td width='10%'><a class='exp-list-link' href='#' data-catid='"+value.category_id+"' data-catname='"+value.category+"'><i class='fa fa-chevron-right'></i></a></td></tr>";
-            	i++;
-            })
-            $('.list-categories').html(expcatlist);
+            if (msg.status == 1) {
+                $.each(msg.data, function (key, value) {
+                    expcatlist += "<tr>";
+                    expcatlist += "<td width='90%'>";
+                    expcatlist += "<a class='exp-list-link' href='#' data-catname='" + value.category + "' data-catid='" + value.category_id + "'><b>" + value.category + "</b></a>";
+                    expcatlist += "</td>";
+                    expcatlist += "<td width='10%'>";
+                    expcatlist += "<a class='exp-list-link' href='#' data-catname='" + value.category + "' data-catid='" + value.category_id + "'><i class='fa fa-chevron-right'></i></a>";
+                    expcatlist += "</td>";
+                    expcatlist += "</tr>";
+                })
+                $('.list-categories').html(expcatlist);
+            }
+            else {
+                alert(msg);
+            }
         }
-        else{
-            alert(msg);
-        }
-    }
-});
+    });
 
 });
 
 myApp.onPageInit('exp-cat-list', function () {
 
-	$('#category-name').html(category_name);
+    $('#category-name').html(category_name);
 
-	var prd_itm ="";
+    var prd_itm = "";
 
-	$.ajax({
-    			type:"POST",
-			url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
-        headers:{"token":token},
-			data:{category_id: category_id, country_id: exp_country_id, city_id: exp_city_id},
-    			dataType:"json",
-    			success: function(msg){
+    $.ajax({
+        type: "POST",
+        //url: "getexperiencelist.php",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
+        headers: {"token": token},
+        data: {category_id: category_id, country_id: exp_country_id, city_id: exp_city_id},
+        dataType: "json",
+        success: function (msg) {
 
-					if (msg.status ==1){
-						 $.each(msg.data, function(key,value)
-                            {
+            if (msg.status == 1) {
+                $.each(msg.data, function (key, value) {
 
-                                prd_itm += '<div class="single-shop-list">';
-                                prd_itm += '<div class="shop-inner">';
-                                prd_itm += '<div class="shop-img">';
-                                prd_itm += '<img src="'+value.image+'" alt=""/>';
-                                prd_itm += '</div>';
-                                prd_itm += '<div class="shop-content">';
-                                prd_itm += '<h3>'+value.product+'</h3>';
-                                prd_itm += '<div class="price-box">';
-                             prd_itm += '</div>';
-                             prd_itm += '<a href="#" class="button btn-details exp-product-link" data-product_code="'+value.product_code+'">Details</a>'
-                             prd_itm += '</div>';
-                             prd_itm += '</div>';
-                             prd_itm += '</div>';
+                    prd_itm += '<div class="single-shop-list">';
+                    prd_itm += '<div class="shop-inner">';
+                    prd_itm += '<div class="shop-img">';
+                    prd_itm += '<img src="' + value.image + '" alt=""/>';
+                    prd_itm += '</div>';
+                    prd_itm += '<div class="shop-content">';
+                    prd_itm += '<h3>' + value.product + '</h3>';
+                    prd_itm += '<div class="price-box">';
+                    prd_itm += '</div>';
+                    prd_itm += '<a href="#" class="button btn-details exp-product-link" data-product_code="' + value.product_code + '">Details</a>'
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
 
-					})
-						$('.shop-area').html(prd_itm);
-								}
-					else if(msg.status ==0){
-						$('.shop-area').append('<h3>There is no item in this category');
-					}
-					else{
-						alert("Status Code: "+msg.status+"\n"+msg.message);
-					}
+                })
+                $('.shop-area').html(prd_itm);
+            }
+            else if (msg.status == 0) {
+                $('.shop-area').append('<h3>There is no item in this category');
+            }
+            else {
+                alert("Status Code: " + msg.status + "\n" + msg.message);
+            }
 
-				}
-		});
+        }
+    });
 
 });
-$(document).on('click','#returnsuccess', function(){
+$(document).on('click', '#returnsuccess', function () {
     window.location.replace('inner.html');
     return false;
 
@@ -895,25 +999,25 @@ $(document).on('click','#returnsuccess', function(){
 });
 
 
-
 myApp.onPageInit('experience-product', function (page) {
 
     //alert(category_id);
 
     $.ajax({
-        type:"GET",
-        //url:"getproduct_details.php",
-       url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=product_details&product_code="+product_code,
-        headers:{"token":token},
-        dataType:"json",
-        success: function(msg){
+        type: "GET",
+        //url: "getproduct_details.php?product_code=" + product_code,
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=product_details&product_code="+product_code,
+        headers: {"token": token},
+        dataType: "json",
+        success: function (msg) {
 
             //	console.log(msg);
 
             productdetails.push(msg);
-            if (msg.status ==1 ){
+            if (msg.status == 1) {
 
                 var adult_price = msg.data.package.adult.adult_price;
+
                 //var child_price = msg.data.package.kid.kid_price;
                 max_quant = msg.data.max_quantity;
                 img_url = msg.data.image[0];
@@ -924,12 +1028,13 @@ myApp.onPageInit('experience-product', function (page) {
                 exp_adult_price = msg.data.package.adult.adult_price;
                 //exp_child_price = msg.data.package.kid.kid_price;
                 var has_adult = [];
-                has_adult.push(msg.data.package.adult);
-                var has_kid = [];
-                has_kid.push(msg.data.package.kid);
+                has_adult = msg.data.package.adult;
+
+                var has_kid = []
+                has_kid = msg.data.package.kid;
                 var has_pickup = [];
-                has_pickup.push(msg.data.location.pickup_address);
-                exp_day_slot.push(msg.data.day_slots);
+                has_pickup = msg.data.location.pickup_address;
+                exp_day_slot = msg.data.day_slots;
                 advance_book = msg.data.advance_book;
                 advance_book_format = msg.data.advance_book_format;
 
@@ -937,53 +1042,79 @@ myApp.onPageInit('experience-product', function (page) {
                 has_faqs.push(msg.data.faqs);
 
 
+
+
                 //delivery_type = msg.data.delivery_type;
 
 
                 let result = "";
                 let resultqty = "";
-                let resultpickup ="";
-                let resultadvance ="";
-                let resultfaqs ="";
+                let resultpickup = "";
+                let resultadvance = "";
+                let resultfaqs = "";
 
                 result += '<div class="single-product">';
                 result += '<div class="single-product-img">';
-                result += '<a href="#"><img src="'+img_url+'" alt="" /></a>';
+                result += '<a href="#"><img src="' + img_url + '" alt="" /></a>';
                 result += '</div>';
                 result += '<div class="single-product-content">';
-                result += '<h1 class="product_title">'+product_name+'</h1>';
+                result += '<h1 class="product_title">' + product_name + '</h1>';
                 result += '<div class="price-box">';
-                result += '<span class="new-price"></span>';
+                result += '<span class="color-black">N </span><span class="new-price"></span>';
                 result += '</div>';
                 result += '<div class="short-description">';
                 result += msg.data.description;
                 result += '<form action="#">';
                 result += '<div class="quantity">';
-                console.log(result);
-                if(has_adult.length != null) {
-                    resultqty += '<div><input type="number" value="'+msg.data.package.adult.min_adult+'">';
-                    resultqty += 'Adult(s) (Price: <span id="adultprice">'+msg.data.package.adult.adult_price+'</span>)<br>(Min Qty: '+msg.data.package.adult.min_adult+' and Max Qty: '+msg.data.package.adult.max_adult+')</div>';
+
+                if (has_adult != null) {
+                    resultqty += '<table style="border-left: none !important;">';
+                    resultqty += '<tr>';
+                    resultqty += '<td>';
+                    resultqty += 'Adult(s) (Price: <span id="adultprice">' + msg.data.package.adult.adult_price + '</span>)<br>(Min Qty: ' + msg.data.package.adult.min_adult + ' and Max Qty: ' + msg.data.package.adult.max_adult + ')';
+                    resultqty += '</td>';
+                    resultqty += '<td>';
+                    resultqty += '<input type="number" id="exp_adult" style="float: right !important;" min="' + msg.data.package.adult.min_adult + '" max="' + msg.data.package.adult.max_adult + '" value="' + msg.data.package.adult.min_adult + '">';
+                    resultqty += '</td>';
+
+                    resultqty += '</tr>';
+                    resultqty += '</table>';
                     resultqty += '<br>';
+                    exp_adult_quant = msg.data.package.adult.min_adult;
                 }
-                if (has_kid.length != null) {
-                    resultqty += '<div>  <input type="number" value="1">';
-                    resultqty += 'Kid(s) (Price: <span id="kidprice">'+msg.data.package.kid_price+'</span>)<br>(Min Qty: '+msg.data.package.min_kid+' and Max Qty: '+msg.data.package.max_kid+')</div>';
+
+                if (has_kid != null) {
+                    resultqty += '<table style="border-left: none !important;">';
+                    resultqty += '<tr>';
+                    resultqty += '<td>';
+                    resultqty += 'Kid(s) (Price: <span id="kidprice">' + msg.data.package.kid_price + '</span>)<br>(Min Qty: ' + msg.data.package.min_kid + ' and Max Qty: ' + msg.data.package.max_kid + ')';
+                    resultqty += '</td>';
+                    resultqty += '<td>';
+
+                    resultqty += '<input type="number" style="float: right !important;" min="' + msg.data.package.adult.min_kid + '" max="' + msg.data.package.adult.max_kid + '" value="1">';
+
+                    resultqty += '</td>';
+
+                    resultqty += '</tr>';
+
+                    resultqty += '</table>';
+
+                    exp_kid_quant = msg.data.package.kid.min_kid;
                 }
                 result += resultqty;
                 result += '</div>';
 
                 result += '<div>';
-                result += '<p><select class="inputtype">';
+                result += '<p><select class="inputtype" id="exp_address_id">';
                 result += '<option>Select Location</option>';
-                $.each(msg.data.location, function(key,value) {
-                    result += '<option value="' + value.id + '">"' + value.store_name + '" ' + value.exp_address + ' ' + value.city + '</option>';
+                $.each(msg.data.location, function (key, value) {
+                    result += '<option value="'+value.id+'" data-store="'+value.store_name+'">"' + value.store_name + '" ' + value.exp_address + ' ' + value.city + '</option>';
                 });
                 result += '</select></p><br><br>';
                 result += '</div>';
 
 
-
-                if (has_pickup.length > 0) {
+                if (has_pickup != null) {
                     resultpickup += '<div>';
                     resultpickup += '<p><select class="inputtype">';
                     resultpickup += '<option value="">Select Pick up Location</option>';
@@ -992,31 +1123,30 @@ myApp.onPageInit('experience-product', function (page) {
                 }
                 result += resultpickup;
 
-                if (advance_book != null || advance_book > 0)
-				{
-					resultadvance = '<p>Book before '+advance_book+' '+advance_book_format+'</p>';
+                if (advance_book != null || advance_book > 0) {
+                    resultadvance = '<b class="color-red">Book before ' + advance_book + ' ' + advance_book_format + '</b>';
                 }
 
                 result += resultadvance;
 
                 result += '<div>';
-                result += '<input type="date" min="'+msg.data.start_date+'" max="'+msg.data.end_date+'" id="date-slot" class="inputtype" style="width:98% !important;"><br><br>';
+                result += '<input type="date" min="' + msg.data.start_date + '" max="' + msg.data.end_date + '" id="date_slot" class="inputtype" style="width:94% !important;"><br><br>';
 
 
-                result += '<select id="time-slot" class="inputtype" style="width: 100% !important;">';
+                result += '<select id="time_slot" class="inputtype" style="width: 100% !important;">';
                 result += '<option value="">Select Time Slot<option>';
                 result += '</select>';
                 result += '</div><br><br>';
-                result += '<button class="button button-big">Buy Now</button>';
+                result += '<button class="button button-big-purple" id="btn-exp-summary">Buy Now</button>';
                 result += '</form>';
 
-                if(has_faqs.length > 0) {
+                if (has_faqs != null) {
                     resultfaqs += '<div class="div-faq">';
                     resultfaqs += '<h2>FAQs</h2>';
 
-                    $.each(msg.data.faqs, function(key,value2) {
-                        resultfaqs += '<b>'+value2.question+'</b>';
-                        resultfaqs += '<p>'+value2.answer+'</p>';
+                    $.each(msg.data.faqs, function (key, value2) {
+                        resultfaqs += '<b>' + value2.question + '</b>';
+                        resultfaqs += '<p>' + value2.answer + '</p>';
                     });
 
                     resultfaqs += '</div>';
@@ -1024,32 +1154,221 @@ myApp.onPageInit('experience-product', function (page) {
                 result += resultfaqs;
 
 
-
                 prod_signature = msg.data.signature;
 
 
-
                 $('.single-product-area').html(result);
+
+                var getadult_quant = $('#exp_adult').val();
+                var getkid_quant = $('#exp_kid').val();
+
+                if (getadult_quant != null) {
+                    exp_total_adult = parseFloat(exp_adult_price) * parseFloat(getadult_quant);
+
+                } else {
+                    exp_total_adult = 0;
+                }
+
+                if (getkid_quant != null) {
+                    exp_total_kid = parseFloat(exp_kid_price) * parseFloat(getkid_quant);
+
+                } else {
+                    exp_total_kid = 0;
+                }
+
+                exp_total_price = parseFloat(exp_total_adult) + parseFloat(exp_total_kid);
+                $('.new-price').html(exp_total_price);
+                prod_signature = msg.data.signature;
+
+
             }
-            else{
-                $('.single-product-area').html("Status Code: "+msg.status+"\n"+msg.message);
+            else {
+                $('.single-product-area').html("Status Code: " + msg.status + "\n" + msg.message);
             }
 
         }
     });
 });
 
-$(document).on('change','#day_slot', function() {
-    var day_slot = $('#day_slot').val();
+$(document).on('change', '#exp_adult', function () {
+//    alert("something changed");
+    exp_total_adult = parseFloat(exp_adult_price) * parseFloat($('#exp_adult').val());
+
+    var getkid_quant = $('#exp_kid').val();
+
+    if (getkid_quant != null) {
+        exp_kid_quant = getkid_quant;
+        exp_total_kid = parseFloat(exp_kid_price) * parseFloat(getkid_quant);
+        exp_total_price = parseFloat(exp_total_adult) + parseFloat(exp_total_kid);
+    } else {
+        exp_total_price = exp_total_adult
+    }
+
+    $('.new-price').html(exp_total_price);
+
+});
+
+$(document).on('change', '#exp_kid', function () {
+
+    exp_total_kid = parseFloat(exp_kid_price) * parseFloat($('#exp_kid').val());
+
+    var getadult_quant = $('#exp_adult').val();
+
+    if (getadult_quant != null) {
+        exp_adult_quant = getadult_quant;
+        exp_total_adult = parseFloat(exp_adult_price) * parseFloat(getadult_quant);
+        exp_total_price = parseFloat(exp_total_adult) + parseFloat(exp_total_kid);
+    } else {
+        exp_total_price = exp_total_kid;
+    }
+
+    $('.new-price').html(exp_total_price);
+
+});
+
+$(document).on('change', '#date_slot', function () {
+    //alert("date hit");
+    var day_slot = $('#date_slot').val();
     var day_obj = new Date(day_slot);
     var day_no = day_obj.getDay();
 
+    exp_date = day_slot;
+
+
     let result = "";
 
-
     result += '<option value="">Select Time Slot..</option>';
-    $.each(exp_day_slot[day_no], function(key,slot) {
-        result += '<option value="">'+slot.start_time+' '+ slot.start_time_period+'</option>';
+   // console.log(exp_day_slot[day_no]);
+    if (exp_day_slot[day_no] == null) {
+        result += '<option value="" selected>No Time Slot for this day</option>';
+    } else{
+    $.each(exp_day_slot[day_no], function (key, slot) {
+        result += '<option value="'+slot.start_time+'">' + slot.start_time + slot.start_time_period + ' - ' + slot.end_time + slot.end_time_period + '</option>';
     });
-    $('#time-slot').html(result);
+}
+
+    exp_date = day_slot;
+    $('#time_slot').html(result);
+});
+
+$(document).on('change', '#time_slot', function () {
+    exp_start_time = $(this).val();
+
+});
+
+$(document).on('change', '#exp_address_id', function () {
+    exp_address_id = $(this).val();
+    branch_name = $('option:selected', this).attr('data-store');
+
+});
+
+$(document).on('click', '#btn-exp-summary', function(){
+    if (exp_adult_quant < 1 || exp_kid_quant < 1){
+        myApp.alert("Kindly Enter A Vaild Quantitiy");
+        return false;
+    }else if (exp_address_id == null){
+        myApp.alert("Kindly Select A Location");
+        $('#exp_address_id').focus();
+    }else if(exp_start_time == null){
+        myApp.alert("Kindly Select A Time Slot");
+        $('#time_slot').focus();
+    }else{
+        mainView.router.loadPage('exp-summary.html');
+
+    }
+
+});
+
+myApp.onPageInit('experience-cart', function (page) {
+    // Following code will be executed for page with data-page attribute equal to "about"
+    // myApp.alert('This is the auction description page');
+
+    //var delivery_name;
+    //alert(delivery_name);
+
+    let result;
+    let result2;
+
+
+
+
+    result = '<tr>';
+    result += '<td classs="summary-td-img">';
+    result += '<div class="shop-img"><img src="' + img_url + '"></div>';
+    result += '</td>';
+    result += '<td classs="summary-td-content">';
+    result += '<h2 class="summary-prd-name">' + product_name + '</h2>';
+
+        result += '<p><b>Location: </b>' + branch_name + '</p>';
+    result += '<p><b>Date: </b>' +exp_date+ '</p>';
+    result += '<p><b>Time: </b>' +exp_start_time+ '</p>';
+
+        if(exp_adult_quant != null){
+            result += '<p>'+exp_adult_quant+' Adult(s)</p>';
+        }
+    if(exp_kid_quant != null){
+        result += '<p>'+exp_kid_quant+' Kid(s)</p>';
+    }
+
+
+    result += '</td>';
+    result += '</tr>';
+
+
+    $('.table-prd-item').html(result);
+
+    $('#grand-total').html(exp_total_price);
+
+});
+
+$(document).on('click', '#btn-exp-buy', function(){
+    var first_name = $('#txtfname').val();
+    var last_name = $('#txtlname').val();
+    var email = $('#txtemail').val();
+    var phone = $('#txtphone').val();
+    var exp_date_post = exp_date +' '+ exp_start_time;
+
+    if (first_name == "") {
+        myApp.alert("Enter First Name");
+    } else if (last_name == "") {
+        myApp.alert("Enter Last Name");
+    } else if (email == "") {
+        myApp.alert("Enter Email Address");
+    } else if (phone == "") {
+        myApp.alert("Enter Phone Number");
+    } else {
+        let exp_payload = {
+            date: exp_date_post,
+            price: exp_adult_price,
+            signature: prod_signature,
+            address_id: exp_address_id,
+            adult_quantity: exp_adult_quant,
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            phone_no: phone
+        };
+
+        $.ajax({
+
+            type: "POST",
+            //url: "exp_purchase.php",
+            url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_purchase",
+            headers: {token: token},
+            data: exp_payload,
+            dataType: "json",
+            success: function (msg) {
+                if (msg.status == 1) {
+
+                    voucher_code = msg.voucher_code;
+                    order_no = msg.order_no;
+                    mainView.router.loadPage('success.html');
+                    delivery_type = "";
+                } else {
+                    myApp.alert(msg.message);
+                }
+            }
+        });
+    }
+
 });

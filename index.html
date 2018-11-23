@@ -27,31 +27,32 @@
       <!-- Your main view, should have "view-main" class -->
       <div class="view view-main" data-page="index">
         <!-- Top Navbar-->
-          <div class="navbar" style="background: transparent !important;">
-          </div>
+
         <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
 
 		  <div class="pages">
   <!-- Page, data-page contains page name-->
   <div data-page="index" class="page">
     <!-- Scrollable page content-->
-    <div class="page-content login-content">
+    <div class="page-content login-content registerbody">
       <div class="login-block">
-							<div class="login-screen-content registerbody">
-								<div class="register-content">
-									<h3 class=""><img src="img/logo2.png" alt=""></h3>
-									<form>
+
+							<div class="login-screen-content">
+								<div class="register-content margin-tb-60">
+									<h3><img src="img/login/logo.png" alt="" class="login-logo"></h3>
+									<form class="frm-login">
+                                        <h1 class="white-text h1-signin">Sign In</h1>
 										<div class="inputbox">
-											<span>Username:</span><br>
+											<span class="white-text">Username</span><br>
 											<input type="text" name="name" id="txtUsername" placeholder="Username" style="width: 100% !important;">
 										</div>
 										<div class="inputbox">
-											<span>Password:</span><br>
+											<span class="white-text">Password</span><br>
 											<input type="password" id="pwdPass" name="password" placeholder="***********" style="width: 100% !important;">
 										</div>
-                                        <a href="forget-password.html">Forgot Password?</a>
+                                        <a href="forget-password.html"><h4>Forgot Password?</h4></a>
 										<div class="inputbox">
-											<button class="button button-big" id="btn-login">Login</button>
+											<button class="button button-big" id="btn-login">Sign In</button>
 										</div>
 									</form>
 								</div>
