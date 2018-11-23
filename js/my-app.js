@@ -1130,6 +1130,8 @@ myApp.onPageInit('experience-product', function (page) {
                 result += resultadvance;
 
                 result += '<div>';
+                result += '<p>Select Date</p>';
+
                 result += '<input placeholder="Select Date" type="date" min="' + msg.data.start_date + '" max="' + msg.data.end_date + '" id="date_slot" class="inputtype" style="width:94% !important;"><br><br>';
 
 
@@ -1379,31 +1381,3 @@ $(document).on('click', '#btn-exp-buy', function(){
 
 });
 
-
-function onDeviceReady() {
-    document.addEventListener('backbutton', onBackKeyDown, false);
-}
-
-function onBackKeyDown() {
-    var cpage = mainView.activePage;
-    var cpagename = cpage.name;
-    console.log(cpagename);
-    if (($$('#leftpanel').hasClass('active')) || ($$('#rightpanel').hasClass('active'))) { // #leftpanel and #rightpanel are id of both panels.
-        myApp.closePanel();
-        return false;
-    } else if ($$('.modal-in').length > 0) {
-        myApp.closeModal();
-        return false;
-    } else if (cpagename == 'index') {
-        myApp.confirm('Are you sure you want to exit?', function() {
-                // var deviceType = device.platform;
-                // if(deviceType == “Android” || deviceType == “android”){
-                navigator.app.exitApp();
-                // }
-            },
-            function() {
-            });
-    } else {
-        mainView.router.back();
-    }
-}
