@@ -1450,7 +1450,12 @@ tfoot{border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;}
 }
 
 #category-name{
-  text-transform: uppercase !important;;
+  text-transform: uppercase !important;
+  display: block;
+  width: 130px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .shop-img{
