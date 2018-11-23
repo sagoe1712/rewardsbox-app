@@ -1269,9 +1269,11 @@ $(document).on('click', '#btn-exp-summary', function(){
     }else if (exp_address_id == null){
         myApp.alert("Kindly Select A Location");
         $('#exp_address_id').focus();
+        return false;
     }else if(exp_start_time == null){
         myApp.alert("Kindly Select A Time Slot");
         $('#time_slot').focus();
+        return false;
     }else{
         mainView.router.loadPage('exp-summary.html');
 
@@ -1330,12 +1332,16 @@ $(document).on('click', '#btn-exp-buy', function(){
 
     if (first_name == "") {
         myApp.alert("Enter First Name");
+        return false;
     } else if (last_name == "") {
         myApp.alert("Enter Last Name");
+        return false;
     } else if (email == "") {
         myApp.alert("Enter Email Address");
+        return false;
     } else if (phone == "") {
         myApp.alert("Enter Phone Number");
+        return false;
     } else {
         let exp_payload = {
             date: exp_date_post,

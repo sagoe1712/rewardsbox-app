@@ -1225,10 +1225,8 @@ table tr th.width-4 {
 }
 
 select.inputtype{
-	height: 30px !important;
+	height: 50px !important;
   padding: 10px;
-  height: 23px;
-  margin: 15px 0px;
 }
 .mybutton {
   background: #ec4445 none repeat scroll 0 0;
