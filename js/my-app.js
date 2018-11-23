@@ -197,7 +197,7 @@ myApp.onPageInit('catalogue', function (page) {
     $.ajax({
         type: "GET",
         //url: "getcategories-array.php",
-        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=catalogue",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=catalogue",
         headers: {"token": token},
         dataType: "json",
         success: function (msg) {
