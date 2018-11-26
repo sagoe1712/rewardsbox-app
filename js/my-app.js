@@ -756,12 +756,12 @@ $(document).on('change', '#delivery-city', function () {
 
 $(document).on('click', '#btn-checkout', function () {
     //myApp.alert("This button works");
-    var first_name = $('#txtfname').val();
-    var last_name = $('#txtlname').val();
-    var email = $('#txtemail').val();
-    var phone = $('#txtphone').val();
+    var first_name = $.trim($('#txtfname').val());
+    var last_name = $.trim($('#txtlname').val());
+    var email = $.trim($('#txtemail').val());
+    var phone = $.trim($('#txtphone').val();
     var ref_no = Math.floor(Math.random() * 10);
-    var address = $('#txtaddress').val();
+    var address = $.trim($('#txtaddress').val());
     city_id = $('#delivery-city').val();
     state_id = $('#delivery-state').val();
 
@@ -1326,10 +1326,10 @@ myApp.onPageInit('experience-cart', function (page) {
 });
 
 $(document).on('click', '#btn-exp-buy', function(){
-    var first_name = $('#txtfname').val();
-    var last_name = $('#txtlname').val();
-    var email = $('#txtemail').val();
-    var phone = $('#txtphone').val();
+    var first_name = $.trim($('#txtfname').val());
+    var last_name = $.trim($('#txtlname').val());
+    var email = $.trim($('#txtemail').val());
+    var phone = $.trim($('#txtphone').val());
     var exp_date_post = exp_date +' '+ exp_start_time;
 
     if (first_name == "") {
