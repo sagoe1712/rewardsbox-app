@@ -759,7 +759,7 @@ $(document).on('click', '#btn-checkout', function () {
     var first_name = $.trim($('#txtfname').val());
     var last_name = $.trim($('#txtlname').val());
     var email = $.trim($('#txtemail').val());
-    var phone = $.trim($('#txtphone').val();
+    var phone = $.trim($('#txtphone').val());
     var ref_no = Math.floor(Math.random() * 10);
     var address = $.trim($('#txtaddress').val());
     city_id = $('#delivery-city').val();
