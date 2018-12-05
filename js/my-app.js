@@ -226,7 +226,7 @@ myApp.onPageInit('catalogue', function (page) {
                 $('.list-categories').html(list_table);
             }
             else {
-                alert(msg);
+                myApp.alert(msg.message);
             }
         }
     });
@@ -273,7 +273,7 @@ myApp.onPageInit('view-restaurants', function (page) {
                 $('.list-categories').html(list_table);
             }
             else {
-                alert(msg);
+                myApp.alert(msg.message);
             }
         }
     });
@@ -583,14 +583,14 @@ myApp.onPageInit('bills-list', function (page) {
     $.ajax({
         type: "GET",
         //url: "getbill-list.php",
-        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=paymen",
+        url:"http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=payment",
         headers: {"token": token},
         dataType: "json",
         success: function (msg) {
 
             if (msg.status == 1) {
                 cat_list = msg.data;
-                console.log(cat_list);
+                //console.log(cat_list);
                 $.each(msg.data, function (key, value) {
                     list_table += "<tr>";
                     list_table += "<td width='90%'>";
@@ -608,7 +608,7 @@ myApp.onPageInit('bills-list', function (page) {
                 $('.list-categories').html(list_table);
             }
             else {
-                alert(msg);
+                alert(msg.message);
             }
         }
     });
@@ -1301,7 +1301,7 @@ $(document).on('click', '#btn-checkout', function () {
             delivery_details: JSON.stringify(cust_payload)
         }
 
-
+console.log(payload);
         $.ajax({
 
             type: "POST",
@@ -1437,7 +1437,7 @@ myApp.onPageInit('experience-list', function (page) {
                 $('.list-categories').html(expcatlist);
             }
             else {
-                alert(msg);
+                myApp.alert(msg.message);
             }
         }
     });
