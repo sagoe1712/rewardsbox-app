@@ -191,8 +191,6 @@ $(document).on('click', '#logout', function () {
 
 
 });
-
-
 myApp.onPageInit('catalogue', function (page) {
     //myApp.alert("catalogue page loaded");
     let list_table = "";
@@ -243,7 +241,7 @@ myApp.onPageInit('view-restaurants', function (page) {
     $.ajax({
         type: "GET",
         //url: "getrestaurants.php",
-        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=meals",
+        url:"http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=meals",
         headers: {"token": token},
         dataType: "json",
         success: function (msg) {
@@ -467,6 +465,7 @@ var a = 1;
         success: function (msg) {
 
           if(msg.status == 1){
+             // console.log(msg.data);
               $.each(msg.data.data, function(key, value){
               result += '<li class="accordion-item"><a href="#" class="item-content item-link">';
               result += '<div class="item-inner">';
@@ -507,7 +506,7 @@ var a = 1;
                   }
                   result += '</td>';
                   result += '<td>';
-                  result += '<a href="#" class="button btn-mealredeem" id="btn-meal-redeem" data-identity ="'+a+'" data-prd-name="'+val.product_name+'" data-sign="'+val.signature+'" data-branch_id="'+branch_id+'"   data-branch_name="'+branch_name+'" data-food_img="'+val.image[0].image_url+'" data-max_qty = "'+val.max_quantity+'" data-price = "'+val.price+'" data-delivery_type="'+val.delivery_type+'" >Redeem</a>';
+                  result += '<a href="#" class="button btn-mealredeem" id="btn-meal-redeem" data-identity ="'+a+'" data-prd-name="'+val.product_name+'" data-sign="'+val.signature+'" data-branch_id="'+val.branch_details[0].branch_id+'"   data-branch_name="'+branch_name+'" data-food_img="'+val.image[0].image_url+'" data-max_qty = "'+val.max_quantity+'" data-price = "'+val.price+'" data-delivery_type="'+val.delivery_type+'" >Redeem</a>';
                   result += '</td>';
 
                   result += '</tr>';
@@ -557,6 +556,7 @@ $(document).on('click', '#btn-meal-redeem', function () {
     product_name = $(this).attr('data-prd-name');
     img_url = $(this).attr('data-food_img');
     branch_id = $(this).attr('data-branch_id');
+    alert(branch_id);
     branch_name = category_name;
     delivery_type = $(this).attr('data-delivery_type');
     unitprice = $(this).attr('data-price');
@@ -806,9 +806,12 @@ $(document).on('click', '#btn-bill-pay', function () {
             headers: {token: token},
             data: payload,
             dataType: "json",
+            beforeSend: function() {
+                $('.loading-div').show();
+            },
             success: function (msg) {
+                $('.loading-div').hide();
                 if (msg.status == 1) {
-
                     voucher_code = msg.voucher_code;
                     order_no = msg.order_no;
                     mainView.router.loadPage('success.html');
@@ -1301,7 +1304,7 @@ $(document).on('click', '#btn-checkout', function () {
             delivery_details: JSON.stringify(cust_payload)
         }
 
-console.log(payload);
+
         $.ajax({
 
             type: "POST",
@@ -1310,7 +1313,11 @@ console.log(payload);
             headers: {token: token},
             data: payload,
             dataType: "json",
+            beforeSend: function() {
+                $('.loading-div').show();
+            },
             success: function (msg) {
+                $('.loading-div').hide();
                 if (msg.status == 1) {
 
                     voucher_code = msg.voucher_code;
@@ -1864,7 +1871,11 @@ $(document).on('click', '#btn-exp-buy', function(){
             headers: {token: token},
             data: exp_payload,
             dataType: "json",
+            beforeSend: function() {
+                $('.loading-div').show();
+            },
             success: function (msg) {
+                $('.loading-div').hide();
                 if (msg.status == 1) {
 
                     voucher_code = msg.voucher_code;

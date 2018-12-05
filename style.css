@@ -1781,6 +1781,19 @@ u{
   height: 100%;
 }
 
+.cinemas-page{
+  background: url(img/cinemas/bg.png) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  height: 100%;
+}
+.travels-page{
+  background: url(img/travels/bg.png) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  height: 100%;
+}
+
 
 .btn-meals-bottom{
   position: fixed !important;
@@ -1795,6 +1808,11 @@ u{
 .meal-h1{
   margin-top: 45% !important;
   font-size: 43px;
+}
+
+.comingsoon-h1{
+    margin-top: 30% !important;
+    font-size: 43px;
 }
 .experience-h4{
   margin-top: 7% !important;
@@ -1850,4 +1868,23 @@ img.food-img {
 
 .meallist-arrow{
   float: right !important;
+}
+
+div.loading-div{
+  position: absolute;
+  height: 100% !important;
+  width: 100% !important;
+  text-align: center !important;
+  z-index: 100000000 !important;
+  top: 0px !important;
+  left: 0px !important;
+  background: #000 !important;
+  opacity: 0.5;
+  display: none;
+}
+
+div.loading-div img{
+  margin: auto !important;
+  margin-top: 50% !important;
+  opacity: 0.9 !important;
 }
