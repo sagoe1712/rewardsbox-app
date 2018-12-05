@@ -52,6 +52,10 @@ var exp_adult_quant;
 var exp_kid_quant;
 var exp_date, exp_start_time;
 var exp_address_id;
+var category_data=[];
+var bill_name;
+var customer_id_text;
+var food_img;
 
 var myApp = new Framework7();
 
@@ -229,6 +233,112 @@ myApp.onPageInit('catalogue', function (page) {
 
 });
 
+myApp.onPageInit('view-restaurants', function (page) {
+    //myApp.alert("catalogue page loaded");
+    let list_table = "";
+    var d = 0;
+
+
+
+    $.ajax({
+        type: "GET",
+        //url: "getrestaurants.php",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=meals",
+        headers: {"token": token},
+        dataType: "json",
+        success: function (msg) {
+
+            if (msg.status == 1) {
+                cat_list = msg.data;
+                console.log(cat_list);
+                $.each(msg.data, function (key, value) {
+                    list_table += "<tr>";
+                    list_table +="<td width='35%'>";
+                    list_table += "<a class='meal-link' href='#' data-count='" + d + "' data-catname='" + value.name + "'>";
+                    list_table +="<img src='"+value.image+"'>";
+                    list_table +="</a>";
+                    list_table +="</td>";
+                    list_table += "<td width='60%'>";
+                    list_table += "<a class='meal-link' href='#' data-count='" + d + "' data-catname='" + value.name + "' data-imgsrc='"+value.image+"'><b>" + value.name + "</b></a>";
+                    list_table += "</td>";
+                    list_table += "<td width='5%'>";
+                    list_table += "<a class='meal-link' href='#' data-count='" + d + "' data-catname='" + value.name + "'><i class='fa fa-chevron-right'></i></a>";
+                    list_table += "</td>";
+                    list_table += "</tr>";
+
+                    d++;
+
+                })
+                cat_level_0 = list_table;
+                $('.list-categories').html(list_table);
+            }
+            else {
+                alert(msg);
+            }
+        }
+    });
+
+});
+
+$(document).on('click', 'a.meal-link', function () {
+
+    category_id = null;
+    category_name = $(this).attr('data-catname');
+    counta = $(this).attr('data-count');
+    img_url = $(this).attr('data-imgsrc');
+    var e = 0;
+    var f = 0;
+    var menu = cat_list[counta].child_menu;
+    var meal_id =[];
+
+    //console.log(menu);
+
+    let list_table1 = "";
+
+    list_table1 += "<tr class='row-back'>";
+    list_table1 += "<td colspan='2'>";
+    list_table1 += "<a href='#' class='back-link'><i class='fa fa-chevron-left color-white'></i> <span class='color-white'>Back</span></a>";
+    list_table1 += "</td>";
+    list_table1 += "</tr>";
+
+
+
+
+    $.each(menu, function (key, value) {
+
+        //loop all the category id out
+        $.each(value.category, function (key, val) {
+            meal_id.push(val.id);
+            f++;
+        });
+
+        list_table1 += "<tr>";
+        list_table1 += "<td width='80%'>";
+        list_table1 += "<a class='meal-link1' href='#'  data-count='" + e + "' data-catname='" + value.name + "' data-branchid = '" + value.id + "' data-catdata = '[" + meal_id + "]' ><b>" + value.name + "</b></a>";
+        list_table1 += "</td>";
+        list_table1 += "<td width='10%'>";
+
+        list_table1 += "<a class='meal-link1' data-count='" + e + "' href='#' data-catname='" + value.name + "' data-branchid = '" + value.id + "' data-catdata = '[" + meal_id + "]'><i class='fa fa-chevron-right'></i></a>";
+        list_table1 += "</td>";
+        list_table1 += "</tr>";
+        e++;
+
+    })
+    cat_level_1 = list_table1;
+    $('.list-categories').html(list_table1);
+
+
+});
+
+$(document).on('click', 'a.meal-link1', function () {
+    branch_id = null;
+    category_name = $(this).attr('data-catname');
+    branch_id = $(this).attr('data-branchid');
+    category_data = $(this).attr('data-catdata');
+    mainView.router.loadPage('meal-menu.html');
+    });
+
+
 
 $(document).on('click', 'a.cat-link', function () {
 
@@ -297,6 +407,15 @@ $(document).on('click', 'a.cat-link1', function () {
 
 });
 
+$(document).on('click', 'a.bills-link2', function () {
+
+
+    category_id = null;
+    category_name = $(this).attr('data-catname');
+    category_id = $(this).attr('data-catid');
+    mainView.router.loadPage('biller-product.html');
+});
+
 $(document).on('click', 'a.back-link', function () {
 
     $('.list-categories').html(cat_level_0);
@@ -326,6 +445,383 @@ $(document).on('click', 'a.exp-list-link', function () {
     mainView.router.loadPage('exp-list.html');
 });
 
+
+myApp.onPageInit('meal-list', function (page) {
+
+    $('.eatery-venue').html(category_name);
+    $('.rest-img').attr("src", img_url);
+
+var a = 1;
+
+    var prd_itm = "";
+    var result = "";
+
+
+    $.ajax({
+        type: "POST",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=meals_products",
+        //url: "getmeallist.php",
+        headers: {"token": token},
+        data: {branch_id: branch_id, category_data: category_data},
+        dataType: "json",
+        success: function (msg) {
+
+          if(msg.status == 1){
+              $.each(msg.data.data, function(key, value){
+              result += '<li class="accordion-item"><a href="#" class="item-content item-link">';
+              result += '<div class="item-inner">';
+              result += '<div class="item-title">';
+              result += value.category_name;
+              result += '<i class="fa fa-chevron-right meallist-arrow"></i>';
+              result += '</div>';
+              result += '</div></a>';
+              result += '<div class="accordion-item-content">';
+              result += '<div class="block">';
+              result += '<table class="no-left-border">';
+
+                  if (value.data.length){
+              $.each(value.data, function(key, val){
+
+                  result += '<tr>';
+                  result += '<td>';
+                  result +='<img src="'+val.image[0].image_url+'" class="food-img"/>';
+                  result += '</td>';
+                  result += '<td>';
+                  result +='<p><b>'+val.product_name+'</b></p>';
+                  result +='<p>N'+val.price+'</p>';
+                  result +='<p><i>'+val.description+'</i></p>';
+                  if(val.delivery_type == 1){
+                      result +='<p><i class="fa fa-truck"></i> <i>Pick Up</i></p>';
+                      delivery_type = 1;
+                  }else if(val,delivery_type == 2){
+                      result +='<p><i class="fa fa-truck"></i> <i>Delivery</i></p>';
+                      delivery_type = 2;
+                  }else{
+                      result +='<p><i class="fa fa-truck"></i> ';
+                      result +='<select class="drp-redeem" id="'+a+'">';
+                      result +='<option value="3">Select your Redemption Method</option>';
+                      result +='<option value="1">Pick Up</option>';
+                      result +='<option value="2">Delivery</option>';
+                      result +='</select>';
+                      result +='</p>';
+                  }
+                  result += '</td>';
+                  result += '<td>';
+                  result += '<a href="#" class="button btn-mealredeem" id="btn-meal-redeem" data-identity ="'+a+'" data-prd-name="'+val.product_name+'" data-sign="'+val.signature+'" data-branch_id="'+branch_id+'"   data-branch_name="'+branch_name+'" data-food_img="'+val.image[0].image_url+'" data-max_qty = "'+val.max_quantity+'" data-price = "'+val.price+'" data-delivery_type="'+val.delivery_type+'" >Redeem</a>';
+                  result += '</td>';
+
+                  result += '</tr>';
+                  a++;
+
+              });
+                  }else{
+                      result += '<tr><td colspan="3"><b>No Item In This Meal Category</b></td></tr>'
+                  }
+
+
+                  result += '</table>';
+              result += '</div>';
+              result += '</div>';
+              result += '</li>';
+              });
+              $('.meal-listing').html(result);
+
+
+
+
+          }else if (msg.status == 0){
+              $('.meal-container').html("<h3 class='no-meal-text'>No meal menu from this restaurant</h3>");
+
+          }else{
+              $('.meal-container').html(msg.message);
+
+          }
+
+        }
+    });
+
+});
+
+//changes delivery type on the meal redemption button
+$(document).on('change', '.drp-redeem', function () {
+    var drpselect = $(this).val();
+    var identity = $(this).attr('id');
+    $('#btn-real-redeem[data-identity="'+identity+'"]').attr('data-delivery_type', drpselect);
+
+});
+
+$(document).on('click', '#btn-meal-redeem', function () {
+
+
+    prod_signature = $(this).attr('data-sign');
+    product_name = $(this).attr('data-prd-name');
+    img_url = $(this).attr('data-food_img');
+    branch_id = $(this).attr('data-branch_id');
+    branch_name = category_name;
+    delivery_type = $(this).attr('data-delivery_type');
+    unitprice = $(this).attr('data-price');
+    max_quant = $(this).attr('data-max_quantity');
+    prod_quant = 1;
+    prdprice = $(this).attr('data-price');
+
+    if(delivery_type == 3) {
+        myApp.alert("Select Redemption Method");
+        return false;
+    }else {
+            mainView.router.loadPage('summary.html');
+        }
+
+});
+
+
+myApp.onPageInit('bills-list', function (page) {
+
+    //myApp.alert("catalogue page loaded");
+    let list_table = "";
+    var d = 0;
+
+    $.ajax({
+        type: "GET",
+        //url: "getbill-list.php",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=paymen",
+        headers: {"token": token},
+        dataType: "json",
+        success: function (msg) {
+
+            if (msg.status == 1) {
+                cat_list = msg.data;
+                console.log(cat_list);
+                $.each(msg.data, function (key, value) {
+                    list_table += "<tr>";
+                    list_table += "<td width='90%'>";
+                    list_table += "<a class='bills-link' href='#' data-count='" + d + "' data-catname='" + value.name + "'><b>" + value.name + "</b></a>";
+                    list_table += "</td>";
+                    list_table += "<td width='10%'>";
+                    list_table += "<a class='bills-link' href='#' data-count='" + d + "' data-catname='" + value.name + "'><i class='fa fa-chevron-right'></i></a>";
+                    list_table += "</td>";
+                    list_table += "</tr>";
+
+                    d++;
+
+                })
+                cat_level_0 = list_table;
+                $('.list-categories').html(list_table);
+            }
+            else {
+                alert(msg);
+            }
+        }
+    });
+
+
+});
+
+
+$(document).on('click', 'a.bills-link', function () {
+
+    category_id = null;
+    category_name = $(this).attr('data-catname');
+    counta = $(this).attr('data-count');
+    var e = 0;
+    var menu = cat_list[counta].child_menu;
+
+    let list_table1 = "";
+
+    list_table1 += "<tr class='row-back'>";
+    list_table1 += "<td colspan='2'>";
+    list_table1 += "<a href='#' class='back-link'><i class='fa fa-chevron-left color-white'></i> <span class='color-white'>Back</span></a>";
+    list_table1 += "</td>";
+    list_table1 += "</tr>";
+
+
+    $.each(menu, function (key, value) {
+        list_table1 += "<tr>";
+        list_table1 += "<td width='80%'>";
+        list_table1 += "<a class='bills-link1' href='#'  data-count='" + e + "' data-catname='" + value.name + "' data-branchid = '" + value.id + "'><b>" + value.name + "</b></a>";
+        list_table1 += "</td>";
+        list_table1 += "<td width='10%'>";
+        list_table1 += "<a class='bills-link1' data-count='" + e + "' href='#' data-catname='" + value.name + "' data-branchid = '" + value.id + "'><i class='fa fa-chevron-right'></i></a>";
+        list_table1 += "</td>";
+        list_table1 += "</tr>";
+        e++;
+
+    })
+    cat_level_1 = list_table1;
+    $('.list-categories').html(list_table1);
+
+
+});
+
+$(document).on('click', 'a.bills-link1', function () {
+
+    category_id = null;
+    category_name = $(this).attr('data-catname');
+    countb = $(this).attr('data-count');
+    var menu1 = cat_list[counta].child_menu[countb].category;
+
+    let list_table2 = "";
+
+    list_table2 += "<tr class='row-back'>";
+    list_table2 += "<td colspan='2'>";
+    list_table2 += "<a href='#' class='back-link1'><i class='fa fa-chevron-left color-white'></i> <span class='color-white'>Back</span></a>";
+    list_table2 += "</td>";
+    list_table2 += "</tr>";
+
+
+    $.each(menu1, function (key, value) {
+        list_table2 += "<tr>";
+        list_table2 += "<td width='90%'>";
+        list_table2 += "<a class='bills-link2' href='#' data-catname='" + value.name + "' data-catid='" + value.id + "'><b>" + value.name + "</b></a>";
+        list_table2 += "</td>";
+        list_table2 += "<td width='10%'>";
+        list_table2 += "<a class='cat-link2' href='#' data-catname='" + value.name + "' data-catid='" + value.id + "'><i class='fa fa-chevron-right'></i></a>";
+        list_table2 += "</td>";
+        list_table2 += "</tr>";
+
+    })
+    $('.list-categories').html(list_table2);
+
+});
+
+myApp.onPageInit('biller-product', function (page) {
+
+    $('#category-name').html(category_name);
+
+    var prd_itm = "";
+    $.ajax({
+        type: "POST",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
+        //url: "getproduct.php",
+        headers: {"token": token},
+        data: {category_id: category_id},
+        dataType: "json",
+        success: function (msg) {
+
+            if(msg.status==1){
+                $.each(msg.data, function (key, value) {
+                    prd_itm += '<div class="single-shop-list">';
+                    prd_itm += '<div class="bills-left">';
+                    prd_itm += '<h3>' + value.product_name + '</h3>';
+                    prd_itm += '<div class="bill-box">';
+                    prd_itm += '<span class="new-price"><span class="color-black">N</span> ' + value.price + '</span>';
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+
+                    prd_itm += '<div class="bill-right">';
+
+//		 prd_itm += '</div>';
+
+                    prd_itm += '<a href="#" class="button btn-bills-pay bills-product-link" data-product_name="'+value.product_name+'" data-product_price="'+value.price+'"  data-prd_sign="' + value.signature + '" data-customer_id_text = "'+value.customer_id_text+'">Pay</a>'
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                })
+                $('.shop-area').html(prd_itm);
+            }
+            else if (msg.status == 0) {
+                $('.shop-area').html('<h3>There is no item in this category</h3>');
+            }
+            else {
+                alert("Status Code: " + msg.status + "\n" + msg.message);
+            }
+
+        }
+    });
+
+
+});
+
+$(document).on('click', 'a.bills-product-link', function () {
+
+    prod_signature = null;
+    prod_signature = $(this).attr('data-prd_sign');
+
+    tprice = null;
+    tprice = $(this).attr('data-product_price');
+
+    bill_name = null;
+    bill_name = $(this).attr('data-product_name');
+
+    customer_id_text = $(this).attr('data-customer_id_text');
+
+
+
+    mainView.router.loadPage('bill_summary.html');
+
+});
+
+myApp.onPageInit('bill-cart', function (page) {
+
+    var bill_item ="";
+
+    bill_item +='<div>'
+    bill_item +='<p><b class="color-black">'+category_name+' '+bill_name+'</b></p>';
+    bill_item += '<b><span class="new-price yellow-text"><span class="color-black">N</span> ' + tprice + '</span></b>';
+    bill_item +='</div>';
+
+    $('.bill-item').html(bill_item);
+
+//alert(customer_id_text);
+
+    if(customer_id_text == null){
+        $('.cust_id').hide();
+    }else {
+        $('.cust_id').show();
+        $('#txtcustid').attr("placeholder",customer_id_text)
+    }
+
+});
+
+
+$(document).on('click', '#btn-bill-pay', function () {
+
+    var customer_id = $.trim($('#txtcustid').val());
+    var email = $.trim($('#txtemail').val());
+    var phone = $.trim($('#txtphone').val());
+
+    if(customer_id == null){
+        myApp.alert("Enter the "+customer_id_text)
+        return false;
+    }else if (email == "") {
+        myApp.alert("Enter Email Address");
+    } else if (phone == "") {
+        myApp.alert("Enter Phone Number");
+    } else {
+        let payload = {
+
+            signature: prod_signature,
+            price: tprice,
+            email: email,
+            phone_no: phone,
+            customer_id: customer_id
+
+        }
+
+
+        $.ajax({
+
+            type: "POST",
+            //url: "billpayment.php",
+            url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=bills_purchase",
+            headers: {token: token},
+            data: payload,
+            dataType: "json",
+            success: function (msg) {
+                if (msg.status == 1) {
+
+                    voucher_code = msg.voucher_code;
+                    order_no = msg.order_no;
+                    mainView.router.loadPage('success.html');
+                    delivery_type = "";
+                } else {
+                    myApp.alert(msg.message);
+                }
+            }
+        });
+
+    }
+
+});
 
 myApp.onPageInit('shop-list', function (page) {
 
@@ -361,7 +857,7 @@ myApp.onPageInit('shop-list', function (page) {
                     prd_itm += '<div class="price-box">';
                     prd_itm += '<span class="new-price"><span class="color-black">N</span> ' + value.price + '</span>';
                     prd_itm += '</div>';
-                    prd_itm += '<a href="#" class="button btn-details cat-product-link" data-product_code="' + value.product_code + '">View Product</a>'
+                    prd_itm += '<a href="#" class="button btn-details bills-product-link" data-product_code="' + value.product_code + '">View Product</a>'
                     prd_itm += '</div>';
                     prd_itm += '</div>';
                     prd_itm += '</div>';
@@ -379,6 +875,8 @@ myApp.onPageInit('shop-list', function (page) {
     });
 
 });
+
+
 
 $(document).on('click', 'a.cat-product-link', function () {
 
@@ -660,7 +1158,7 @@ myApp.onPageInit('shopping-cart', function (page) {
 
     result = '<tr>';
     result += '<td classs="summary-td-img">';
-    result += '<div class="shop-img"><img src="' + img_url + '"></div>';
+    result += '<div class="shop-img"><img class="summ-img" src="' + img_url + '"></div>';
     result += '</td>';
     result += '<td classs="summary-td-content">';
     result += '<h2 class="summary-prd-name">' + product_name + '</h2>';
@@ -807,6 +1305,7 @@ $(document).on('click', '#btn-checkout', function () {
         $.ajax({
 
             type: "POST",
+            //url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=item_purchase",
             url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=item_purchase",
             headers: {token: token},
             data: payload,
