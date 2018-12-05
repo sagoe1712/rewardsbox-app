@@ -556,7 +556,7 @@ $(document).on('click', '#btn-meal-redeem', function () {
     product_name = $(this).attr('data-prd-name');
     img_url = $(this).attr('data-food_img');
     branch_id = $(this).attr('data-branch_id');
-    alert(branch_id);
+    //alert(branch_id);
     branch_name = category_name;
     delivery_type = $(this).attr('data-delivery_type');
     unitprice = $(this).attr('data-price');
@@ -1502,6 +1502,11 @@ $(document).on('click', '#returnsuccess', function () {
     return false;
 
 
+});
+
+$(document).on('click', '#btnhome', function () {
+    window.location.replace('inner.html');
+    return false;
 });
 
 
