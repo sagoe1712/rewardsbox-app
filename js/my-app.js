@@ -41,6 +41,7 @@ var exp_location_id;
 var exp_location_name;
 var exp_day_slot = [];
 var cat_list;
+var cinema_list;
 var counta;
 var countb;
 var cat_level_0;
@@ -56,6 +57,20 @@ var category_data=[];
 var bill_name;
 var customer_id_text;
 var food_img;
+var cinema_id;
+var cinema_name;
+var movie_name;
+var events = [];
+var event_count;
+var event_ticket_type;
+var event_venue;
+var ticket_count;
+var movie_details = [];
+var movie_day_count = 0;
+var movie_price;
+var total_movie_price;
+
+
 
 var myApp = new Framework7();
 
@@ -202,11 +217,13 @@ myApp.onPageInit('catalogue', function (page) {
         url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=catalogue",
         headers: {"token": token},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
-
+            $('.loading-div').hide();
             if (msg.status == 1) {
                 cat_list = msg.data;
-                console.log(cat_list);
                 $.each(msg.data, function (key, value) {
                     list_table += "<tr>";
                     list_table += "<td width='90%'>";
@@ -231,6 +248,308 @@ myApp.onPageInit('catalogue', function (page) {
 
 });
 
+myApp.onPageInit('cinema-page', function (page) {
+
+    let list_table = "";
+    var d = 0;
+
+    $.ajax({
+        type: "GET",
+        //url: "getcinemas.php",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_movies",
+        headers: {"token": token},
+        dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
+        success: function (msg) {
+            $('.loading-div').hide();
+
+            if (msg.status == 1) {
+                cinema_list = msg.data;
+                console.log(cinema_list);
+                $.each(msg.data, function (key, value) {
+                    list_table += "<tr>";
+                    list_table +="<td width='35%'>";
+                    list_table += "<a class='cinema-link' href='#' data-count='" + d + "' data-cinemaname='" + value.name + "'>";
+                    list_table +="<img src='"+value.thumbnail+"'>";
+                    list_table +="</a>";
+                    list_table +="</td>";
+                    list_table += "<td width='60%'>";
+                    list_table += "<a class='cinema-link' href='#' data-count='" + d + "' data-cinemaname='" + value.name + "' data-imgsrc='"+value.thumbnail+"'><b>" + value.name + "</b></a>";
+                    list_table += "</td>";
+                    list_table += "<td width='5%'>";
+                    list_table += "<a class='cinema-link' href='#' data-count='" + d + "' data-cinemaname='" + value.name + "'><i class='fa fa-chevron-right'></i></a>";
+                    list_table += "</td>";
+                    list_table += "</tr>";
+
+                    d++;
+
+                })
+                cat_level_0 = list_table;
+                $('.list-cinemas').html(list_table);
+            }
+            else {
+                $('.list-cinemas').html(msg.message);
+            }
+        }
+    });
+
+});
+
+
+$(document).on('click', 'a.cinema-link', function () {
+
+    cinema_id = null;
+    cinema_name = $(this).attr('data-cinemaname');
+    counta = $(this).attr('data-count');
+    var e = 0;
+    var menu = cinema_list[counta].tickets;
+    //console.log(menu);
+
+    let list_table1 = "";
+
+    list_table1 += "<tr class='row-back'>";
+    list_table1 += "<td colspan='3'>";
+    list_table1 += "<a href='#' class='cin-back-link'><i class='fa fa-chevron-left color-white'></i> <span class='color-white'>Back</span></a>";
+    list_table1 += "</td>";
+    list_table1 += "</tr>";
+
+
+    $.each(menu, function (key, value) {
+        list_table1 += "<tr>";
+        list_table1 +="<td width='35%'>";
+        list_table1 += "<a class='cinema-link1' href='#' data-count='" + e + "' data-prodcode='" + value.product_code +"' data-moviename='" + value.name + "'>";
+        list_table1 +="<img src='"+value.thumbnail+"'>";
+        list_table1 +="</a>";
+        list_table1 +="</td>";
+        list_table1 += "<td width='60%'>";
+
+        list_table1 += "<a class='cinema-link1' href='#' data-prodcode='" + value.product_code + "'  data-count='" + e + "' data-moviename='" + value.title + "'><b>" + value.title + "</b></a>";
+        list_table1 += "</td>";
+        list_table1 += "<td width='5%'>";
+        list_table1 += "<a class='cinema-link1' data-count='" + e + "' href='#' data-prodcode='" + value.product_code +"' data-moviename='" + value.name + "'><i class='fa fa-chevron-right'></i></a>";
+        list_table1 += "</td>";
+        list_table1 += "</tr>";
+        e++;
+
+    })
+    cat_level_1 = list_table1;
+    $('.list-cinemas').html(list_table1);
+
+
+});
+
+
+$(document).on('click', 'a.cinema-link1', function () {
+    product_code = null;
+    product_code = $(this).attr('data-prodcode');
+   // alert(product_code);
+    movie_name = $(this).attr('data-moviename');
+    mainView.router.loadPage('movie.html');
+});
+
+myApp.onPageInit('movie-details', function (page) {
+
+    var result;
+    var movie_date;
+    var movie_time;
+
+
+    var i = 0;
+    ticket_count = 0;
+
+    $('.cinema-name').html(cinema_name);
+    $('.movie-name').html(movie_name);
+
+
+
+
+    $.ajax({
+        type: "GET",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=movie_details&product_code="+product_code,
+        //url: "getmoviedetails.php",
+        headers: {"token": token},
+        //data: {product_code: product_code},
+        dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
+        success: function (msg) {
+
+            $('.loading-div').hide();
+
+            if(msg.status == 1){
+                $('.movie-banner').html('<img src="'+msg.data.artwork+'">')
+                $('.movie-desc').html(msg.data.description);
+                img_url = msg.data.artwork;
+
+
+                result='';
+                $.each(msg.data.showtimes.day, function(key, value){
+                   // console.log(value.day);
+                    movie_details.push(value);
+                    console.log(movie_details);
+
+                    result += '<li class="accordion-item"><a href="#" class="item-content item-link">';
+                    result += '<div class="item-inner">';
+                    result += '<div class="item-title">';
+                    result += value.day;
+                    result += " ";
+                    //console.log(value);
+
+                    result +='<i>(';
+                    result += value.date;
+                    result +=')</i>';
+                    result += '<i class="fa fa-chevron-right cinema-arrow"></i>';
+                    result += '</div>';
+                    result += '</div></a>';
+                    result += '<div class="accordion-item-content">';
+                    result += '<div class="block">';
+
+                    $.each(value.times, function(key1, value1){
+
+                        result += '<a href="#" class="button btn-showtimes" data-daycount="'+movie_day_count+'" data-ticketcount="'+ticket_count+'">';
+                        result += value1.time;
+                        result += '</a>';
+                        ticket_count++;
+
+                    });
+
+                    result += '</div>';
+                    result += '</div>';
+                    result += '</li>';
+                    movie_day_count++;
+
+                });
+                $('.list-showtime').html(result);
+
+
+
+
+            }else{
+                $('.div-showtime').html(msg.message);
+
+            }
+
+        }
+    });
+
+});
+
+$(document).on('click', '.btn-showtimes', function(){
+
+    movie_day_count = $(this).attr("data-daycount");
+    ticket_count = $(this).attr("data-ticketcount");
+    //console.log(movie_details[movie_day_count].times[ticket_count].date_time);
+
+    mainView.router.loadPage("movie-summary.html");
+
+
+});
+
+
+myApp.onPageInit('movie-cart', function (page) {
+
+    var ticket_dropdown = "";
+    var e = 1;
+    prod_signature = "";
+    $('.movie-image').attr('src',img_url);
+    $('.movie-title').html(movie_name);
+    $('.movie-daytime').html(movie_details[movie_day_count].times[ticket_count].date_time);
+    $('.movie-location').html(cinema_name);
+
+
+    $.each(movie_details[movie_day_count].times[ticket_count].ticket, function(key, value){
+        ticket_dropdown += "<option value='"+e+"' data-price='"+value.price+"' data-type='"+value.type+"' data-maxquant='"+value.max_quantity+"' data-sign='"+value.signature+"'>";
+        ticket_dropdown  += value.type +" ("+value.price+")";
+        ticket_dropdown += "</option>";
+        e++;
+
+    });
+    console.log(ticket_dropdown);
+    $('.drp-movie-ticket').append(ticket_dropdown);
+
+});
+
+$(document).on('change','.drp-movie-ticket', function(){
+    prod_signature = "";
+    prod_signature = $('option:selected', this).attr('data-sign');
+    var cmaxquant = $('option:selected', this).attr('data-maxquant');
+    $('#movie-qty').attr('max',cmaxquant);
+    prod_quant = 1;
+    $('#movie-qty').val('1');
+    movie_price = $('option:selected', this).attr('data-price');
+    total_movie_price = parseFloat(prod_quant) * parseFloat(movie_price);
+    $('#grand-total').html(total_movie_price);
+
+});
+
+$(document).on('change','#movie-qty', function(){
+    prod_quant = $(this).val();
+    total_movie_price = parseFloat(prod_quant) * parseFloat(movie_price);
+    $('#grand-total').html(total_movie_price);
+
+
+});
+
+$(document).on('click', '#btn-movie-buy', function () {
+    //myApp.alert("This button works");
+
+    var email = $.trim($('#txtemail').val());
+    var phone = $.trim($('#txtphone').val());
+
+    if (prod_signature == ""){
+        myApp.alert("Select Ticket Type");
+        $('.drp-movie-ticke').focus();
+        return false;
+    } else if (email == "") {
+        myApp.alert("Enter Email Address");
+        return false;
+    } else if (phone == "") {
+        myApp.alert("Enter Phone Number");
+        return false;
+    } else {
+
+        let payload = {
+            quantity: prod_quant,
+            price: total_movie_price,
+            signature: prod_signature,
+            email: email,
+            phone_no: phone
+        };
+
+        $.ajax({
+
+            type: "POST",
+            //url: "cinema_purchase.php",
+            url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=cinema_purchase",
+            headers: {token: token},
+            data: payload,
+            dataType: "json",
+            beforeSend: function() {
+                $('.loading-div').show();
+            },
+            success: function (msg) {
+                $('.loading-div').hide();
+                if (msg.status == 1) {
+
+                    voucher_code = msg.voucher_code;
+                    order_no = msg.order_no;
+                    mainView.router.loadPage('success.html');
+                    delivery_type = "";
+                    return false;
+                } else {
+                    myApp.alert(msg.message);
+                    return false;
+                }
+            }
+        });
+
+    }
+
+});
+
 myApp.onPageInit('view-restaurants', function (page) {
     //myApp.alert("catalogue page loaded");
     let list_table = "";
@@ -244,7 +563,11 @@ myApp.onPageInit('view-restaurants', function (page) {
         url:"http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=meals",
         headers: {"token": token},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
+            $('.loading-div').hide();
 
             if (msg.status == 1) {
                 cat_list = msg.data;
@@ -420,6 +743,12 @@ $(document).on('click', 'a.back-link', function () {
 
 });
 
+$(document).on('click', 'a.cin-back-link', function () {
+
+    $('.list-cinemas').html(cat_level_0);
+
+});
+
 $(document).on('click', 'a.back-link1', function () {
 
     $('.list-categories').html(cat_level_1);
@@ -462,8 +791,11 @@ var a = 1;
         headers: {"token": token},
         data: {branch_id: branch_id, category_data: category_data},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
-
+            $('.loading-div').hide();
           if(msg.status == 1){
              // console.log(msg.data);
               $.each(msg.data.data, function(key, value){
@@ -582,11 +914,15 @@ myApp.onPageInit('bills-list', function (page) {
 
     $.ajax({
         type: "GET",
-        // "getbill-list.php",
+        //url:"getbill-list.php",
         url:"http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=payment",
         headers: {"token": token},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
+            $('.loading-div').hide();
 
             if (msg.status == 1) {
                 cat_list = msg.data;
@@ -695,8 +1031,11 @@ myApp.onPageInit('biller-product', function (page) {
         headers: {"token": token},
         data: {category_id: category_id},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
-
+            $('.loading-div').hide();
             if(msg.status==1){
                 $.each(msg.data, function (key, value) {
                     prd_itm += '<div class="single-shop-list">';
@@ -839,8 +1178,11 @@ myApp.onPageInit('shop-list', function (page) {
         headers: {"token": token},
         data: {category_id: category_id},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
-
+            $('.loading-div').hide();
             if (msg.status == 1) {
                 $.each(msg.data, function (key, value) {
                     prd_itm += '<div class="single-shop-list">';
@@ -879,6 +1221,216 @@ myApp.onPageInit('shop-list', function (page) {
 
 });
 
+myApp.onPageInit('events-list', function (page) {
+
+   // $('#category-name').html(category_name);
+
+    var prd_itm = "";
+    var e = 0;
+
+    $.ajax({
+        type: "POST",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=view_events",
+        //url: "getevents.php",
+        headers: {"token": token},
+        dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
+        success: function (msg) {
+            $('.loading-div').hide();
+            if (msg.status == 1) {
+
+                events = msg.events;
+                $.each(msg.events, function (key, value) {
+                    prd_itm += '<div class="single-shop-list">';
+                    prd_itm += '<div class="shop-inner">';
+                    prd_itm += '<div class="shop-img">';
+                    prd_itm += '<img src="' + value.artwork + '" alt=""/>';
+                    prd_itm += '</div>';
+                    prd_itm += '<div class="shop-content">';
+                    prd_itm += '<h3>' + value.title + '</h3>';
+//		 prd_itm += '<div class="pro-rating-s">';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '</div>';
+                    prd_itm += '<div class="price-box">';
+                    prd_itm += '<b>Date & Time</b>';
+                    prd_itm += '<p class="new-price"><span class="color-black">'+value.date+'</span></p>';
+                    prd_itm += '</div>';
+                    prd_itm += '<a href="#" class="button btn-details event-det-link" data-count="'+e+'">View Details</a>'
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+
+                    e++;
+                })
+                $('.shop-area').html(prd_itm);
+            }
+            else if (msg.status == 0) {
+                $('.shop-area').append('<h3>There is no event available</h3>');
+            }
+            else {
+                myApp.alert("Status Code: " + msg.status + "\n" + msg.message);
+            }
+
+        }
+    });
+
+});
+
+$(document).on('click', 'a.event-det-link', function () {
+   // alert("event has been hit");
+    event_count = $(this).attr('data-count');
+    mainView.router.loadPage('event-details.html');
+
+});
+
+
+myApp.onPageInit('event-details', function (page) {
+  //  console.log(events[event_count].title);
+    $('.category-name').html(events[event_count].title);
+
+
+    let result = "";
+
+    result += '<div class="single-product">';
+    result += '<div class="single-event-img">';
+    result += '<img src="' + events[event_count].banner + '" alt="" />';
+    result += '</div>';
+    result += '<div class="single-product-content">';
+    result += '<h1 class="product_title">' + events[event_count].title + '</h1>';
+
+    result += '<b>Date & Time</b>';
+    result += '<p class="color-black">';
+    result += events[event_count].date;
+    result += '</p>';
+//						result += '</div>';
+    result += '<div class="short-description">';
+    result += '<p class="color-black">' + events[event_count].description + '</p>';
+    result += '</div>';
+    result += '<table class="ticket-types">';
+    result += '<tr>';
+    result += '<th>Ticket Type</th>';
+    result += '<th>Price</th>';
+    result += '<th>Event Venue</th>';
+    result += '<th></th>';
+    result += '</tr>';
+    $.each(events[event_count].tickets,function(key, value){
+        result += '<tr>';
+        result += '<td>';
+        result += value.title;
+        result += '</td>';
+        result += '<td>';
+        result += value.price;
+        result += '</td>';
+        result += '<td>';
+        result += value.venue;
+        result += '</td>';
+        result += '<td>';
+        result += '<a class="button btn-event-redeem" data-venue="'+value.venue+'" data-prod-sign="'+value.signature+'" data-price="'+value.price+'" data-ticket-type="'+value.title+'">Redeem</a>';
+        result += '</td>';
+        result += '</tr>';
+
+    });
+
+
+
+
+
+    result += '</table>';
+    result += '</div>';
+    result += '</div>';
+
+
+
+    $('.single-product-area').html(result)
+
+});
+
+$(document).on('click', 'a.btn-event-redeem', function () {
+    event_ticket_type = $(this).attr('data-ticket-type');
+    prod_signature = $(this).attr('data-prod-sign');
+    prdprice = $(this).attr('data-price');
+    prod_quant = 1;
+    delivery_price = 0;
+    event_venue = $(this).attr('data-venue');
+    mainView.router.loadPage("event-summary.html");
+});
+
+$(document).on('change', '#event-qty', function () {
+    prod_quant = $(this).val();
+    totalprice();
+    totalshipitm();
+});
+
+myApp.onPageInit('event-cart', function (page) {
+    $('.event-title').html(events[event_count].title);
+    $('.event-ticket').html(event_ticket_type);
+    $('.event-datetime').html(events[event_count].date);
+    $('.event-venue').html(event_venue);
+    $('#event-qty').val('1');
+    totalprice();
+    totalshipitm();
+});
+
+$(document).on('click', '#btn-event-buy', function () {
+    //myApp.alert("This button works");
+
+    var email = $.trim($('#txtemail').val());
+    var phone = $.trim($('#txtphone').val());
+
+    if (email == "") {
+        myApp.alert("Enter Email Address");
+        return false;
+    } else if (phone == "") {
+        myApp.alert("Enter Phone Number");
+        return false;
+    } else {
+
+        let exp_payload = {
+            quantity: prod_quant,
+            price: totalshipping,
+            signature: prod_signature,
+            email: email,
+            phone_no: phone
+        };
+
+        $.ajax({
+
+            type: "POST",
+           // url: "event_purchase.php",
+            url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=event_purchase",
+            headers: {token: token},
+            data: exp_payload,
+            dataType: "json",
+            beforeSend: function() {
+                $('.loading-div').show();
+            },
+            success: function (msg) {
+                $('.loading-div').hide();
+                if (msg.status == 1) {
+
+                    voucher_code = msg.voucher_code;
+                    order_no = msg.order_no;
+                    mainView.router.loadPage('success.html');
+                    delivery_type = "";
+                    return false;
+                } else {
+                    myApp.alert(msg.message);
+                    return false;
+                }
+            }
+        });
+
+    }
+
+});
+
+
 myApp.onPageInit('biller-listing', function (page) {
 
     $('#category-name').html(category_name);
@@ -892,8 +1444,11 @@ myApp.onPageInit('biller-listing', function (page) {
         headers: {"token": token},
         data: {category_id: category_id},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
-
+            $('.loading-div').hide();
             if (msg.status == 1) {
                 $.each(msg.data, function (key, value) {
                     prd_itm += '<div class="single-shop-list">';
@@ -963,8 +1518,11 @@ myApp.onPageInit('single-product', function (page) {
         headers: {"token": token},
         data: {category_id: category_id},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
-
+            $('.loading-div').hide();
             //	console.log(msg);
 
             productdetails.push(msg);
@@ -1197,7 +1755,11 @@ myApp.onPageInit('shopping-cart', function (page) {
             //url: "getstate.php",
             headers: {token: token},
             dataType: "json",
+            beforeSend: function() {
+                $('.loading-div').show();
+            },
             success: function (msg) {
+                $('.loading-div').hide();
                 //alert("na we dey here");
                 if (msg.status == 1) {
 
@@ -1264,9 +1826,12 @@ $(document).on('change', '#delivery-state', function () {
         headers: {token: token},
         data: {state_id: state_id},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
             if (msg.status == 1) {
-
+                $('.loading-div').hide();
                 $('#delivery-city').html(' <option value="">Select Delivery City..</option>');
 
                 $.each(msg.data, function (key, value) {
@@ -1291,7 +1856,11 @@ $(document).on('change', '#delivery-city', function () {
         headers: {token: token},
         data: {city_id: city_id, state_id: state_id, signature: prod_signature, quantity: prod_quant},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
+            $('.loading-div').hide();
             if (msg.status == 1) {
                 delivery_price = msg.data.price;
                 $('#delivery-text').html(delivery_price);
@@ -1400,7 +1969,11 @@ myApp.onPageInit('experience', function () {
         //url: "getexpcountries.php",
         headers: {token: token},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
+            $('.loading-div').hide();
             //alert("na we dey here");
             if (msg.status == 1) {
 
@@ -1430,7 +2003,11 @@ $(document).on('change', '#exp-country', function () {
         url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=exp_city&country_id="+exp_country_id,
         headers: {token: token},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
+            $('.loading-div').hide();
             //alert("na we dey here");
             if (msg.status == 1) {
                 cityresult = "<option value='0'> Select City</option>";
@@ -1480,7 +2057,11 @@ myApp.onPageInit('experience-list', function (page) {
         url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_category&flag=experience",
         headers: {"token": token},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
+            $('.loading-div').hide();
 
             if (msg.status == 1) {
                 $.each(msg.data, function (key, value) {
@@ -1516,8 +2097,11 @@ myApp.onPageInit('exp-cat-list', function () {
         headers: {"token": token},
         data: {category_id: category_id, country_id: exp_country_id, city_id: exp_city_id},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
-
+            $('.loading-div').hide();
             if (msg.status == 1) {
                 $.each(msg.data, function (key, value) {
 
@@ -1572,8 +2156,11 @@ myApp.onPageInit('experience-product', function (page) {
         url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=product_details&product_code="+product_code,
         headers: {"token": token},
         dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
         success: function (msg) {
-
+            $('.loading-div').hide();
             //	console.log(msg);
 
             productdetails.push(msg);
@@ -1829,7 +2416,7 @@ $(document).on('change', '#exp_address_id', function () {
 
 $(document).on('click', '#btn-exp-summary', function(){
     if (exp_adult_quant < 1 || exp_kid_quant < 1){
-        myApp.alert("Kindly Enter A Vaild Quantitiy");
+        myApp.alert("Kindly Enter A Valid Quantity");
         return false;
     }else if (exp_address_id == null){
         myApp.alert("Kindly Select A Location");
@@ -1841,6 +2428,7 @@ $(document).on('click', '#btn-exp-summary', function(){
         return false;
     }else{
         mainView.router.loadPage('exp-summary.html');
+        return false;
 
     }
 

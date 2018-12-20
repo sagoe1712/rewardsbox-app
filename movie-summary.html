@@ -4,25 +4,33 @@
 <div class="navbar">
   <div class="navbar-inner">
     <div class="left"><a href="#" class="back link"> <i class="icon icon-back"></i><span>Back</span></a></div>
-    <div class="center sliding">Summary</div>
+    <div class="center sliding">Booking Details</div>
   </div>
 </div>
 <div class="pages">
   <!-- Page, data-page contains page name-->
-  <div data-page="bill-cart" class="page">
+  <div data-page="movie-cart" class="page">
     <!-- Scrollable page content-->
     <div class="page-content">
       <div class="content-block">
         <div class="content-block-inner">
-			<div class="bill-item">
-
+			<div>
+				<img src="" class="movie-image">
+				<h3 class="movie-title"></h3>
+				<p>Date & Time: <span class="movie-daytime"></span></p>
+				<p>Cinema: <span class="movie-location"></span></p>
+				<br>
+				<p>Ticket Type: <select class="drp-movie-ticket">
+					<option value="">Select Ticket Type</option>
+				</select>
+				</p>
 			</div>
 
-			<div class="div-contact div-bill-contact">
+			<div class="div-contact">
 				<h3 class="summary-div-header"><u>Cont</u>act Information</h3>
 				<form action="#">
-					<div class="inputbox cust_id" style="display: none;">
-						<input type="text" id="txtcustid" placeholder=""  class="inputtype">
+					<div class="inputbox">
+						<input type="number" min="1" id="movie-qty" placeholder="Quantity" max=""  class="inputtype">
 					</div>
 					<div class="inputbox">
 						<input type="text" id="txtemail" placeholder="Email Address"  class="inputtype">
@@ -35,7 +43,14 @@
 
 
 
-					<a class="button btn-checkout" id="btn-bill-pay">Redeem</a>
+
+			<div class="carttotal">
+
+				<p><span class="grand-t">Grand Total <span class="sub-t-p" id="grand-total">0</span></span>	</p>
+			</div>
+
+
+					<a class="button btn-checkout" id="btn-movie-buy">Confirm</a>
 			<a class="button btn-cancel" id="returnsuccess">Cancel</a>
 
         </div>
@@ -43,4 +58,3 @@
     </div>
   </div>
 </div>
-

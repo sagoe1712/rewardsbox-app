@@ -686,6 +686,8 @@ h2.product-name {
 .single-shop-list .shop-content {
   overflow: hidden;
   padding-left: 12px;
+  position: relative !important;
+  height: 150px !important;
 }
 .pro-rating-s {
   margin: 4px 0;
@@ -1684,6 +1686,14 @@ div [data-page="shopping-cart"] u{
   margin: 30px 0px 0px !important;
 }
 
+.cinema-banner{
+  background: url("img/banner/cinemas.png") !important;
+  height: 150px !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  margin: 30px 0px 0px !important;
+}
+
 .bills-banner{
   background: url("img/banner/bills.png") !important;
   height: 150px !important;
@@ -1723,12 +1733,12 @@ div [data-page="shopping-cart"] u{
 .exp-banner{
   background: url("img/banner/experience.png") !important;
   height: 150px !important;
-  background-size: cover !important;
+  background-size: contain !important;
   background-repeat: no-repeat !important;
   margin: 30px 0px 0px !important;
 }
 
-.list-categories{
+.list-categories, .list-cinemas{
   background: #e8e8e9 !important;
   color: #000 !important;
   border-radius: 5px !important;
@@ -1736,19 +1746,19 @@ div [data-page="shopping-cart"] u{
   -o-border-radius: 5px !important;
 }
 
-.list-categories tr{
+.list-categories tr , .list-cinemas tr{
   border: 1px solid #ccc;
 }
 
-.list-categories tr:last-child{
+.list-categories tr:last-child, .list-cinemas tr:last-child{
   border: none !important;
 }
 
-.list-categories tr td{
+.list-categories tr td, .list-cinemas tr td{
   padding: 30px !important;
 }
 
-.list-categories tr td a {
+.list-categories tr td a, .list-cinemas tr td a {
   color: #000 !important;
 }
 
@@ -1787,6 +1797,15 @@ u{
   background-repeat: no-repeat !important;
   height: 100%;
 }
+
+
+.events-page{
+    background: url(img/events/bg.jpg) !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    height: 100%;
+}
+
 .travels-page{
   background: url(img/travels/bg.png) !important;
   background-size: cover !important;
@@ -1866,7 +1885,7 @@ img.food-img {
   border: none !important;
 }
 
-.meallist-arrow{
+.meallist-arrow, .cinema-arrow{
   float: right !important;
 }
 
@@ -1887,4 +1906,82 @@ div.loading-div img{
   margin: auto !important;
   margin-top: 50% !important;
   opacity: 0.9 !important;
+}
+
+
+
+.shop-content .btn-details{
+  position: absolute !important;
+  bottom: 0px !important;
+}
+
+.single-event-img{
+  height: 200px !important;
+  text-align: center !important;
+  margin-bottom: 20px !important;
+}
+
+.single-event-img img{
+  max-height: 100% !important;
+  width: auto !important;
+  margin: auto !important;
+
+}
+
+.ticket-types{
+  border-left: none !important;
+  left: 0px !important;
+  width: 100% !important;
+  margin-top: 40px !important;
+}
+
+.ticket-types tr th,.ticket-types tr td{
+  margin: 20px !important;
+  padding: 5px !important;
+}
+.ticket-types tr th{
+  text-align: left !important;
+}
+
+.btn-showtimes {
+width:100px !important;
+  height: 35px;
+  float: left !important;
+  margin: 10px 5px;
+}
+
+.btn-event-redeem, .btn-showtimes{
+  background: #3D1A57 !important;
+  color: #fff !important;
+  border: 1px solid #3D1A57 !important;
+}
+
+.event-summ-tab {
+  border-left: none !important;
+  margin-bottom: 30px !important;
+  border-bottom: 1px solid #ccc !important;
+
+}
+
+.event-summ-tab tbody tr:first-child{
+  border-top: 1px solid #ccc !important;
+  border-bottom: 1px solid #ccc !important;
+
+}
+
+.drp-movie-ticket{
+  /* border: 1px solid #ccc; */
+  /* float: left; */
+  height: 23px;
+  /* margin-right: 5px; */
+  /* padding: 10px; */
+  width: 76%;
+  color: #000 !important;
+  background: #EFEFEF !important;
+  border: none !important;
+}
+
+.event-summ-tab tbody tr:first-child td:first-child{
+  border-right: 1px solid #ccc !important;
+
 }
