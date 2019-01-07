@@ -69,6 +69,11 @@ var movie_details = [];
 var movie_day_count = 0;
 var movie_price;
 var total_movie_price;
+let cat_limit = 5;
+var cat_delivery_type;
+var cat_sort;
+var cat_page=1;
+var cur_no_itm = cat_limit;
 
 
 
@@ -213,7 +218,7 @@ myApp.onPageInit('catalogue', function (page) {
 
     $.ajax({
         type: "GET",
-       // url: "getcategories-array.php",
+        //url: "getcategories-array.php",
         url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=nested_category&flag=catalogue",
         headers: {"token": token},
         dataType: "json",
@@ -467,7 +472,7 @@ myApp.onPageInit('movie-cart', function (page) {
         e++;
 
     });
-    console.log(ticket_dropdown);
+   // console.log(ticket_dropdown);
     $('.drp-movie-ticket').append(ticket_dropdown);
 
 });
@@ -1019,6 +1024,170 @@ $(document).on('click', 'a.bills-link1', function () {
 
 });
 
+$(document).on('click','#loadMore', function () {
+    $('#loadMore').hide();
+    cat_page++;
+    var prd_itm;
+    var temp_count = cur_no_itm;
+    cur_no_itm = parseInt(temp_count) + parseInt(cat_limit);
+    $.ajax({
+        type: "POST",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
+        //url: "getproduct.php",
+        headers: {"token": token},
+        data: {category_id: category_id, limit: cat_limit, delivery_type: cat_delivery_type, sort: cat_sort, page: cat_page},
+        dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
+        success: function (msg) {
+            $('.loading-div').hide();
+            if (msg.status == 1) {
+                prd_itm = "";
+                $.each(msg.data, function (key, value) {
+                    prd_itm += '<div class="single-shop-list">';
+                    prd_itm += '<div class="shop-inner">';
+                    prd_itm += '<div class="shop-img">';
+                    prd_itm += '<img src="' + value.image + '" alt=""/>';
+                    prd_itm += '</div>';
+                    prd_itm += '<div class="shop-content">';
+                    prd_itm += '<h3>' + value.product + '</h3>';
+                    prd_itm += '<div class="price-box">';
+                    prd_itm += '<span class="new-price"><span class="color-black">N</span> ' + value.price + '</span>';
+                    prd_itm += '</div>';
+                    prd_itm += '<a href="#" class="button btn-details cat-product-link" data-product_code="' + value.product_code + '">View Product</a>'
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                })
+                $('.shop-area').append(prd_itm);
+                if(msg.total > cur_no_itm){
+                    $('#loadMore').show();
+                }
+            }
+            else if (msg.status == 0) {
+                $('.shop-area').append('<h3>There is no item in this category</h3>');
+            }
+            else {
+                myApp.alert("Status Code: " + msg.status + "\n" + msg.message);
+            }
+
+        }
+    });
+});
+
+$(document).on('change','#drpshopsort', function () {
+
+    cat_sort =  $('option:selected', this).val();
+    cat_page = 1;
+    var prd_itm;
+    $.ajax({
+        type: "POST",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
+        //url: "getproduct.php",
+        headers: {"token": token},
+        data: {category_id: category_id, limit: cat_limit, delivery_type: cat_delivery_type, sort: cat_sort, page: cat_page},
+        dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
+        success: function (msg) {
+            $('.loading-div').hide();
+            if (msg.status == 1) {
+                prd_itm = "";
+                $.each(msg.data, function (key, value) {
+                    prd_itm += '<div class="single-shop-list">';
+                    prd_itm += '<div class="shop-inner">';
+                    prd_itm += '<div class="shop-img">';
+                    prd_itm += '<img src="' + value.image + '" alt=""/>';
+                    prd_itm += '</div>';
+                    prd_itm += '<div class="shop-content">';
+                    prd_itm += '<h3>' + value.product + '</h3>';
+//		 prd_itm += '<div class="pro-rating-s">';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '</div>';
+                    prd_itm += '<div class="price-box">';
+                    prd_itm += '<span class="new-price"><span class="color-black">N</span> ' + value.price + '</span>';
+                    prd_itm += '</div>';
+                    prd_itm += '<a href="#" class="button btn-details cat-product-link" data-product_code="' + value.product_code + '">View Product</a>'
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                })
+                $('.shop-area').html(prd_itm);
+            }
+            else if (msg.status == 0) {
+                $('.shop-area').append('<h3>There is no item in this category</h3>');
+            }
+            else {
+                myApp.alert("Status Code: " + msg.status + "\n" + msg.message);
+            }
+
+        }
+    });
+
+});
+
+$(document).on('change','#drpshopmethod', function () {
+
+    cat_delivery_type =  $('option:selected', this).val();
+    cat_page = 1;
+    var prd_itm;
+    $.ajax({
+        type: "POST",
+        url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
+        //url: "getproduct.php",
+        headers: {"token": token},
+        data: {category_id: category_id, limit: cat_limit, delivery_type: cat_delivery_type, sort: cat_sort, page: cat_page},
+        dataType: "json",
+        beforeSend: function() {
+            $('.loading-div').show();
+        },
+        success: function (msg) {
+            $('.loading-div').hide();
+            if (msg.status == 1) {
+                prd_itm = "";
+                $.each(msg.data, function (key, value) {
+                    prd_itm += '<div class="single-shop-list">';
+                    prd_itm += '<div class="shop-inner">';
+                    prd_itm += '<div class="shop-img">';
+                    prd_itm += '<img src="' + value.image + '" alt=""/>';
+                    prd_itm += '</div>';
+                    prd_itm += '<div class="shop-content">';
+                    prd_itm += '<h3>' + value.product + '</h3>';
+//		 prd_itm += '<div class="pro-rating-s">';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '<a href="#"><i class="fa fa-star"></i></a>';
+//		 prd_itm += '</div>';
+                    prd_itm += '<div class="price-box">';
+                    prd_itm += '<span class="new-price"><span class="color-black">N</span> ' + value.price + '</span>';
+                    prd_itm += '</div>';
+                    prd_itm += '<a href="#" class="button btn-details cat-product-link" data-product_code="' + value.product_code + '">View Product</a>'
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                    prd_itm += '</div>';
+                })
+                $('.shop-area').html(prd_itm);
+            }
+            else if (msg.status == 0) {
+                $('.shop-area').append('<h3>There is no item in this category</h3>');
+            }
+            else {
+                myApp.alert("Status Code: " + msg.status + "\n" + msg.message);
+            }
+
+        }
+    });
+
+});
+
 myApp.onPageInit('biller-product', function (page) {
 
     $('#category-name').html(category_name);
@@ -1167,6 +1336,9 @@ $(document).on('click', '#btn-bill-pay', function () {
 
 myApp.onPageInit('shop-list', function (page) {
 
+    cat_delivery_type = "";
+    cat_sort = "";
+
     $('#category-name').html(category_name);
 
     var prd_itm = "";
@@ -1176,7 +1348,7 @@ myApp.onPageInit('shop-list', function (page) {
         url:"https://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_products",
         //url: "getproduct.php",
         headers: {"token": token},
-        data: {category_id: category_id},
+        data: {category_id: category_id, limit: cat_limit, delivery_type: cat_delivery_type, sort: cat_sort, page: cat_page},
         dataType: "json",
         beforeSend: function() {
             $('.loading-div').show();
@@ -1208,6 +1380,9 @@ myApp.onPageInit('shop-list', function (page) {
                     prd_itm += '</div>';
                 })
                 $('.shop-area').html(prd_itm);
+                if(msg.total > cat_limit){
+                    $('#loadMore').show();
+                }
             }
             else if (msg.status == 0) {
                 $('.shop-area').append('<h3>There is no item in this category</h3>');
@@ -1218,6 +1393,8 @@ myApp.onPageInit('shop-list', function (page) {
 
         }
     });
+
+
 
 });
 
@@ -1402,7 +1579,7 @@ $(document).on('click', '#btn-event-buy', function () {
         $.ajax({
 
             type: "POST",
-           // url: "event_purchase.php",
+            //url: "event_purchase.php",
             url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=event_purchase",
             headers: {token: token},
             data: exp_payload,
@@ -1751,8 +1928,8 @@ myApp.onPageInit('shopping-cart', function (page) {
 
         $.ajax({
             type: "GET",
-            url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_state",
-            //url: "getstate.php",
+            //url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_state",
+            url: "getstate.php",
             headers: {token: token},
             dataType: "json",
             beforeSend: function() {

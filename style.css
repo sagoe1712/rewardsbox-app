@@ -1985,3 +1985,33 @@ width:100px !important;
   border-right: 1px solid #ccc !important;
 
 }
+
+.cat-filters-head{
+  color:#fff;
+  background: #3D1A57;
+  text-align:center;
+  padding: 20px;
+}
+
+.cat-filters-head i{
+  float: right !important;
+}
+
+.cat-filters-head .icon{
+  max-width: 16px !important;
+}
+
+.btn-loadmore{
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 17px;
+   height: auto !important;
+  margin-top: 15px;
+  padding: 10px 42%;
+  color:#fff;
+  background: #3D1A57;
+  width: 100% !important;
+  display: none;
+
+}
