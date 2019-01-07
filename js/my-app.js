@@ -1935,8 +1935,8 @@ myApp.onPageInit('shopping-cart', function (page) {
 
         $.ajax({
             type: "GET",
-            //url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_state",
-            url: "getstate.php",
+            url: "http://rewardsboxnigeria.com/rewardsbox/api/v1/?api=get_state",
+            //url: "getstate.php",
             headers: {token: token},
             dataType: "json",
             beforeSend: function() {
