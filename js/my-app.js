@@ -1065,9 +1065,7 @@ $(document).on('click','#loadMore', function () {
                     $('#loadMore').show();
                 }
             }
-            else if (msg.status == 0) {
-                $('.shop-area').append('<h3>There is no item in this category</h3>');
-            }
+
             else {
                 myApp.alert("Status Code: " + msg.status + "\n" + msg.message);
             }
@@ -1077,6 +1075,8 @@ $(document).on('click','#loadMore', function () {
 });
 
 $(document).on('change','#drpshopsort', function () {
+
+    $('#loadMore').hide();
 
     cat_sort =  $('option:selected', this).val();
     cat_page = 1;
@@ -1119,6 +1119,9 @@ $(document).on('change','#drpshopsort', function () {
                     prd_itm += '</div>';
                 })
                 $('.shop-area').html(prd_itm);
+                if(msg.total > cat_limit){
+                    $('#loadMore').show();
+                }
             }
             else if (msg.status == 0) {
                 $('.shop-area').append('<h3>There is no item in this category</h3>');
@@ -1134,6 +1137,7 @@ $(document).on('change','#drpshopsort', function () {
 
 $(document).on('change','#drpshopmethod', function () {
 
+    $('#loadMore').hide();
     cat_delivery_type =  $('option:selected', this).val();
     cat_page = 1;
     var prd_itm;
@@ -1175,6 +1179,9 @@ $(document).on('change','#drpshopmethod', function () {
                     prd_itm += '</div>';
                 })
                 $('.shop-area').html(prd_itm);
+                if(msg.total > cat_limit){
+                    $('#loadMore').show();
+                }
             }
             else if (msg.status == 0) {
                 $('.shop-area').append('<h3>There is no item in this category</h3>');

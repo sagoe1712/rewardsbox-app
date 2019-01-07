@@ -2008,10 +2008,11 @@ width:100px !important;
   font-size: 17px;
    height: auto !important;
   margin-top: 15px;
-  padding: 10px 42%;
+  padding: 4% 41%;
   color:#fff;
   background: #3D1A57;
   width: 100% !important;
   display: none;
+  line-height: normal !important;
 
 }
