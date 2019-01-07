@@ -668,7 +668,7 @@ h2.product-name {
   max-width: 100% !important;
 }
 .single-shop-list {
-  margin-bottom: 40px;
+  margin-bottom: 0px;
   position: relative !important;
   overflow: hidden;
 }
@@ -687,7 +687,7 @@ h2.product-name {
   overflow: hidden;
   padding-left: 12px;
   position: relative !important;
-  height: 150px !important;
+  height: 200px !important;
 }
 .pro-rating-s {
   margin: 4px 0;
